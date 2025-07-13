@@ -168,7 +168,7 @@ public class UtenteDAO {
     }
 
 
-    //metodo per ottenere utente ID (utile per i join) .
+    //metodo per ottenere utente ID (utile per i join).
     public Utente getUtenteById(int userId) {
         String sql = "SELECT * FROM utente WHERE user_id=?";
 
