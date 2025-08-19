@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class RegistrazioneGUI extends JFrame {
-    // Componenti dell'interfaccia
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JTextField nomeField;
@@ -19,13 +18,11 @@ public class RegistrazioneGUI extends JFrame {
     private JButton annullaButton;
     private UtenteDAO utenteDAO;
 
-    // COSTRUTTORE
     public RegistrazioneGUI() {
         this.utenteDAO = new UtenteDAO();
         creaInterfaccia();
     }
 
-    // METODO che crea l'interfaccia
     private void creaInterfaccia() {
         // === IMPOSTAZIONI FINESTRA ===
         setTitle("📝 Registrazione - UninaBioGarden");
@@ -120,9 +117,7 @@ public class RegistrazioneGUI extends JFrame {
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    // METODO che gestisce la registrazione
     private void eseguiRegistrazione() {
-        // Prendi tutti i dati dai campi
         String nome = nomeField.getText().trim();
         String cognome = cognomeField.getText().trim();
         String email = emailField.getText().trim();
@@ -130,7 +125,6 @@ public class RegistrazioneGUI extends JFrame {
         String password = new String(passwordField.getPassword());
         String tipoUtente = (String) tipoUtenteCombo.getSelectedItem();
 
-        // CONTROLLI DI VALIDAZIONE
         if (nome.isEmpty() || cognome.isEmpty() || email.isEmpty() ||
                 username.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "❌ Tutti i campi sono obbligatori!",
@@ -138,26 +132,21 @@ public class RegistrazioneGUI extends JFrame {
             return;
         }
 
-        // Controlla se l'username esiste già
         if (utenteDAO.esisteUsername(username)) {
             JOptionPane.showMessageDialog(this, "❌ Username già esistente! Scegline un altro.",
                     "Errore", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Crea nuovo utente
         Utente nuovoUtente = new Utente(nome, cognome, email, password, tipoUtente, username);
 
-        // Prova a inserirlo nel database
         if (utenteDAO.inserisciUtente(nuovoUtente)) {
-            // REGISTRAZIONE RIUSCITA!
             JOptionPane.showMessageDialog(this,
                     "✅ Registrazione completata con successo!\nOra puoi fare il login.",
                     "Successo", JOptionPane.INFORMATION_MESSAGE);
 
-            dispose(); // Chiude la finestra di registrazione
+            dispose(); // chiude la finestra di registrazione
         } else {
-            // ERRORE NELLA REGISTRAZIONE
             JOptionPane.showMessageDialog(this,
                     "❌ Errore durante la registrazione. Riprova.",
                     "Errore", JOptionPane.ERROR_MESSAGE);

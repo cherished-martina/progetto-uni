@@ -23,7 +23,6 @@ public class ReportGraficoGUI extends JFrame {
     private AttivitaDAO attivitaDAO;
     private CulturaDAO culturaDAO;
     private ProgettoStagionaleDAO progettoDAO;
-
     private JPanel chartPanel;
     private JComboBox<String> tipoReportCombo;
 
@@ -44,7 +43,6 @@ public class ReportGraficoGUI extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // === PANNELLO SUPERIORE ===
         JPanel topPanel = new JPanel(new FlowLayout());
         topPanel.setBackground(new Color(34, 139, 34));
         topPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
@@ -74,7 +72,7 @@ public class ReportGraficoGUI extends JFrame {
         topPanel.add(generaButton);
         add(topPanel, BorderLayout.NORTH);
 
-        // === PANNELLO CENTRALE ===
+
         chartPanel = new JPanel(new BorderLayout());
         chartPanel.setBorder(BorderFactory.createTitledBorder("📊 Grafico JFreeChart"));
 
@@ -94,7 +92,7 @@ public class ReportGraficoGUI extends JFrame {
 
         add(chartPanel, BorderLayout.CENTER);
 
-        // === PANNELLO INFERIORE ===
+
         JPanel bottomPanel = new JPanel(new FlowLayout());
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
@@ -134,7 +132,7 @@ public class ReportGraficoGUI extends JFrame {
                 panel.setPreferredSize(new Dimension(800, 450));
                 chartPanel.add(panel, BorderLayout.CENTER);
 
-                // Info statistiche
+
                 JTextArea infoArea = new JTextArea(4, 80);
                 infoArea.setEditable(false);
                 infoArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -163,7 +161,7 @@ public class ReportGraficoGUI extends JFrame {
         chartPanel.repaint();
     }
 
-    // GRAFICO 1: Dimensioni Lotti (Grafico a Barre)
+
     private JFreeChart creaGraficoLotti() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -188,14 +186,14 @@ public class ReportGraficoGUI extends JFrame {
                 false                                                   // URLs
         );
 
-        // Personalizza colori
+
         chart.getPlot().setBackgroundPaint(new Color(240, 255, 240));
         chart.setBackgroundPaint(Color.WHITE);
 
         return chart;
     }
 
-    // GRAFICO 2: Distribuzione Culture (Grafico a Torta)
+
     private JFreeChart creaGraficoCulture() {
         DefaultPieDataset dataset = new DefaultPieDataset();
 
@@ -223,13 +221,12 @@ public class ReportGraficoGUI extends JFrame {
         return chart;
     }
 
-    // GRAFICO 3: Stato Attività/Progetti
+
     private JFreeChart creaGraficoStatoAttivita() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
         String titoloGrafico = "";
 
         if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
-            // Per coltivatori: statistiche attività
             List<Attivita> attivita = attivitaDAO.getAttivitaByColtivatore(utenteCorrente.getUserId());
 
             int pianificate = 0, inCorso = 0, completate = 0;
@@ -252,7 +249,6 @@ public class ReportGraficoGUI extends JFrame {
             titoloGrafico = "⚡ Stato Attività di " + utenteCorrente.getNome();
 
         } else {
-            // Per proprietari: statistiche progetti
             List<ProgettoStagionale> progetti = progettoDAO.getProgettiByProprietario(utenteCorrente.getUserId());
 
             int pianificati = 0, inCorso = 0, completati = 0;
@@ -276,14 +272,14 @@ public class ReportGraficoGUI extends JFrame {
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-                titoloGrafico,                          // Titolo
-                "Stati",                                // Asse X
-                "Numero",                               // Asse Y
-                dataset,                                // Dati
-                PlotOrientation.VERTICAL,               // Orientamento
-                true,                                   // Legenda
-                true,                                   // Tooltips
-                false                                   // URLs
+                titoloGrafico,                          // titolo/assex/assex ecc come sopra
+                "Stati",
+                "Numero",
+                dataset,
+                PlotOrientation.VERTICAL,
+                true,
+                true,
+                false
         );
 
         chart.getPlot().setBackgroundPaint(new Color(255, 248, 240));
@@ -292,7 +288,7 @@ public class ReportGraficoGUI extends JFrame {
         return chart;
     }
 
-    // Genera informazioni testuali per il grafico
+
     private String generaInfoGrafico(String tipoGrafico) {
         StringBuilder info = new StringBuilder();
         info.append("📊 STATISTICHE DETTAGLIATE\n");
