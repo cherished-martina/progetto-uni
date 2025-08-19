@@ -14,7 +14,6 @@ public class ProgettoStagionaleDAO {
         this.connection = dbConn.getConnection();
     }
 
-    // INSERIRE UN NUOVO PROGETTO STAGIONALE
     public boolean inserisciProgetto(ProgettoStagionale progetto) {
         String sql = "INSERT INTO progetto_stagionale (nome_progetto, anno, stato, stagione, data_inizio, data_fine, proprietario_id, lotto_id) " +
                 "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
@@ -39,7 +38,7 @@ public class ProgettoStagionaleDAO {
         }
     }
 
-    // OTTENERE TUTTI I PROGETTI DI UN PROPRIETARIO
+
     public List<ProgettoStagionale> getProgettiByProprietario(int proprietarioId) {
         List<ProgettoStagionale> progetti = new ArrayList<>();
 
@@ -98,7 +97,7 @@ public class ProgettoStagionaleDAO {
         return progetti;
     }
 
-    // OTTENERE PROGETTI PER LOTTO
+
     public List<ProgettoStagionale> getProgettiByLotto(int lottoId) {
         List<ProgettoStagionale> progetti = new ArrayList<>();
         String sql = "SELECT * FROM progetto_stagionale WHERE lotto_id = ? ORDER BY data_inizio DESC";
@@ -127,7 +126,7 @@ public class ProgettoStagionaleDAO {
         return progetti;
     }
 
-    // OTTENERE UN PROGETTO PER ID
+
     public ProgettoStagionale getProgettoById(int progettoId) {
         String sql = "SELECT * FROM progetto_stagionale WHERE progetto_id = ?";
 
@@ -154,7 +153,7 @@ public class ProgettoStagionaleDAO {
         return null;
     }
 
-    // OTTENERE PROGETTI PER STAGIONE E ANNO
+
     public List<ProgettoStagionale> getProgettiPerStagioneAnno(String stagione, int anno) {
         List<ProgettoStagionale> progetti = new ArrayList<>();
         String sql = "SELECT * FROM progetto_stagionale WHERE stagione = ? AND anno = ? ORDER BY data_inizio";
@@ -184,7 +183,7 @@ public class ProgettoStagionaleDAO {
         return progetti;
     }
 
-    // OTTENERE PROGETTI PER STATO
+
     public List<ProgettoStagionale> getProgettiPerStato(String stato) {
         List<ProgettoStagionale> progetti = new ArrayList<>();
         String sql = "SELECT * FROM progetto_stagionale WHERE stato = ? ORDER BY data_inizio DESC";
@@ -213,7 +212,7 @@ public class ProgettoStagionaleDAO {
         return progetti;
     }
 
-    // AGGIORNARE UN PROGETTO
+
     public boolean aggiornaProgetto(ProgettoStagionale progetto) {
         String sql = "UPDATE progetto_stagionale SET nome_progetto = ?, anno = ?, stagione = ?, " +
                 "data_inizio = ?, data_fine = ?, stato = ? WHERE progetto_id = ?";
@@ -236,7 +235,7 @@ public class ProgettoStagionaleDAO {
         }
     }
 
-    // AGGIORNARE SOLO LO STATO DI UN PROGETTO
+
     public boolean aggiornaStatoProgetto(int progettoId, String nuovoStato) {
         String sql = "UPDATE progetto_stagionale SET stato = ? WHERE progetto_id = ?";
 
@@ -253,7 +252,7 @@ public class ProgettoStagionaleDAO {
         }
     }
 
-    // ELIMINARE UN PROGETTO
+
     public boolean eliminaProgetto(int progettoId) {
         String sql = "DELETE FROM progetto_stagionale WHERE progetto_id = ?";
 
@@ -269,7 +268,6 @@ public class ProgettoStagionaleDAO {
         }
     }
 
-    // ASSOCIARE UNA CULTURA A UN PROGETTO (tabella progetto_cultura)
     public boolean associaCulturaProgetto(int progettoId, int culturaId) {
         String sql = "INSERT INTO progetto_cultura (progetto_id, cultura_id) VALUES (?, ?)";
 
@@ -286,7 +284,7 @@ public class ProgettoStagionaleDAO {
         }
     }
 
-    // RIMUOVERE ASSOCIAZIONE CULTURA-PROGETTO
+
     public boolean rimuoviCulturaProgetto(int progettoId, int culturaId) {
         String sql = "DELETE FROM progetto_cultura WHERE progetto_id = ? AND cultura_id = ?";
 
@@ -303,7 +301,7 @@ public class ProgettoStagionaleDAO {
         }
     }
 
-    // OTTENERE PROGETTI CON INFORMAZIONI COMPLETE (JOIN con lotto e utente)
+
     public List<String> getProgettiCompleti(int proprietarioId) {
         List<String> progetti = new ArrayList<>();
         String sql = "SELECT ps.*, l.nome_lotto, u.nome as nome_proprietario, u.cognome " +
@@ -336,7 +334,7 @@ public class ProgettoStagionaleDAO {
         return progetti;
     }
 
-    // VERIFICARE SE ESISTE GIÀ UN PROGETTO PER STAGIONE/ANNO/LOTTO
+
     public boolean esisteProgettoPerStagioneLotto(String stagione, int anno, int lottoId) {
         String sql = "SELECT COUNT(*) FROM progetto_stagionale WHERE stagione = ? AND anno = ? AND lotto_id = ?";
 

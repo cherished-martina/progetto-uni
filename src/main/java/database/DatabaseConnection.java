@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-//connettiamo con il database PostgreSQL
+
 public class DatabaseConnection {
     private static final String URL = "jdbc:postgresql://localhost:5432/uninabiogarden";
     private static final String USERNAME = "postgres";
@@ -12,7 +12,7 @@ public class DatabaseConnection {
 
     private Connection connection = null;
 
-    //metodo per ottenere la connessione
+
     public Connection getConnection() {
         try {
             if (connection == null || connection.isClosed()) {
@@ -26,7 +26,7 @@ public class DatabaseConnection {
         return connection;
     }
 
-    //metodo per chiudere la connessione
+
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {

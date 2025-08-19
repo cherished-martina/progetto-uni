@@ -13,7 +13,7 @@ public class CulturaDAO {
         this.connection = dbConn.getConnection();
     }
 
-    // INSERIRE UNA NUOVA CULTURA
+
     public boolean inserisciCultura(Cultura cultura) {
         String sql = "INSERT INTO cultura (nome_cultura, descrizione, tempo_maturazione) VALUES (?, ?, ?)";
 
@@ -31,7 +31,7 @@ public class CulturaDAO {
         }
     }
 
-    // OTTENERE TUTTE LE CULTURE
+
     public List<Cultura> getAllCulture() {
         List<Cultura> culture = new ArrayList<>();
         String sql = "SELECT * FROM cultura ORDER BY nome_cultura";
@@ -54,7 +54,7 @@ public class CulturaDAO {
         return culture;
     }
 
-    // OTTENERE UNA CULTURA PER ID
+
     public Cultura getCulturaById(int culturaId) {
         String sql = "SELECT * FROM cultura WHERE cultura_id = ?";
 
@@ -76,13 +76,13 @@ public class CulturaDAO {
         return null;
     }
 
-    // CERCARE CULTURE PER NOME (ricerca fuzzy)
+
     public List<Cultura> cercaCulturePerNome(String nomeRicerca) {
         List<Cultura> culture = new ArrayList<>();
         String sql = "SELECT * FROM cultura WHERE nome_cultura ILIKE ? ORDER BY nome_cultura";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {
-            pstmt.setString(1, "%" + nomeRicerca + "%"); // ILIKE = case-insensitive LIKE
+            pstmt.setString(1, "%" + nomeRicerca + "%");
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
@@ -100,7 +100,7 @@ public class CulturaDAO {
         return culture;
     }
 
-    // AGGIORNARE UNA CULTURA
+
     public boolean aggiornaCultura(Cultura cultura) {
         String sql = "UPDATE cultura SET nome_cultura = ?, descrizione = ?, tempo_maturazione = ? WHERE cultura_id = ?";
 
@@ -119,7 +119,7 @@ public class CulturaDAO {
         }
     }
 
-    // ELIMINARE UNA CULTURA
+
     public boolean eliminaCultura(int culturaId) {
         String sql = "DELETE FROM cultura WHERE cultura_id = ?";
 
@@ -135,7 +135,7 @@ public class CulturaDAO {
         }
     }
 
-    // VERIFICARE SE UNA CULTURA ESISTE GIÀ (per evitare duplicati)
+
     public boolean esisteCultura(String nomeCultura) {
         String sql = "SELECT COUNT(*) FROM cultura WHERE nome_cultura ILIKE ?";
 
@@ -152,7 +152,7 @@ public class CulturaDAO {
         return false;
     }
 
-    // OTTENERE CULTURE PER PROGETTO (JOIN con progetto_cultura)
+
     public List<Cultura> getCulturePerProgetto(int progettoId) {
         List<Cultura> culture = new ArrayList<>();
         String sql = "SELECT c.* FROM cultura c " +

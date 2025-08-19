@@ -5,7 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-//DAO Data Access Object
+//DAO sta per Data Access Object
 public class UtenteDAO {
     private Connection connection;
 
@@ -14,7 +14,7 @@ public class UtenteDAO {
         this.connection = dbConn.getConnection();
     }
 
-    //inserire utente
+
     public boolean inserisciUtente(Utente utente) {
         String sql = "INSERT INTO utente (nome, cognome, email, password, tipo_utente, username) VALUES (?,?,?,?,?,?)";
 
@@ -35,7 +35,7 @@ public class UtenteDAO {
         }
     }
 
-    //login utente, autenticazione
+
     public Utente autenticaUtente(String username, String password) {
         String sql = "SELECT * FROM utente WHERE username=? AND password=?";
 
@@ -65,7 +65,7 @@ public class UtenteDAO {
         return null; //autenticazione fallita
     }
 
-    //leggere tutti gli utenti
+
     public List<Utente> listaUtenti() {
         List<Utente> utenti = new ArrayList<>();
         String sql = "SELECT user_id, nome, cognome, email, tipo_utente, username FROM utente";
@@ -73,7 +73,7 @@ public class UtenteDAO {
         System.out.println("=== DEBUG UtenteDAO.listaUtenti() ===");
         System.out.println("Eseguendo query: " + sql);
 
-        //try & catch -> prova, se non funziona fai questo...
+
         try (Statement stmt = connection.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
@@ -113,7 +113,7 @@ public class UtenteDAO {
         return utenti;
     }
 
-    //aggiornare utente
+
     public boolean aggiornaUtente(Utente utente) {
         String sql = "UPDATE utente SET password = ?, nome = ?, cognome = ?, email = ?, tipoUtente = ? WHERE username=?";
 
@@ -133,7 +133,7 @@ public class UtenteDAO {
         }
     }
 
-    //rimuovere utente
+
     public boolean rimuoviUtente(Utente utente) {
         String sql = "DELETE FROM utente WHERE username=?";
 
@@ -149,7 +149,7 @@ public class UtenteDAO {
         }
     }
 
-    //verificare se un username è già esistente
+
     public boolean esisteUsername(String username) {
         String sql = "SELECT * FROM utente WHERE username=?";
 
@@ -168,7 +168,7 @@ public class UtenteDAO {
     }
 
 
-    //metodo per ottenere utente ID (utile per i join).
+
     public Utente getUtenteById(int userId) {
         String sql = "SELECT * FROM utente WHERE user_id=?";
 

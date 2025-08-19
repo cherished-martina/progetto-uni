@@ -18,25 +18,18 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class MainGUI extends JFrame {
-    // Dati dell'utente che ha fatto login
     private Utente utenteCorrente;
-
-    // DAO per accedere al database
     private LottoDAO lottoDAO;
     private CulturaDAO culturaDAO;
     private ProgettoStagionaleDAO progettoDAO;
     private AttivitaDAO attivitaDAO;
     private RaccoltaDAO raccoltaDAO;
-
-    // Componenti dell'interfaccia
     private JPanel contentPanel;
     private JLabel infoUtenteLabel;
 
-    // COSTRUTTORE
+
     public MainGUI(Utente utente) {
         this.utenteCorrente = utente;
-
-        // Inizializzazione dei DAO
         this.lottoDAO = new LottoDAO();
         this.culturaDAO = new CulturaDAO();
         this.progettoDAO = new ProgettoStagionaleDAO();
@@ -46,16 +39,14 @@ public class MainGUI extends JFrame {
         creaInterfaccia();
     }
 
-    // METODO che crea l'interfaccia principale
     private void creaInterfaccia() {
-        // === IMPOSTAZIONI FINESTRA ===
         setTitle("🌱 UninaBioGarden - Dashboard");
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // === HEADER ===
+        // header
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(34, 139, 34));
         headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -66,7 +57,7 @@ public class MainGUI extends JFrame {
         infoUtenteLabel.setFont(new Font("Arial", Font.BOLD, 16));
         headerPanel.add(infoUtenteLabel, BorderLayout.WEST);
 
-        // Bottone Logout
+
         JButton logoutButton = new JButton("🚪 Logout");
         logoutButton.setBackground(Color.WHITE);
         logoutButton.setForeground(new Color(34, 139, 34));
@@ -75,18 +66,16 @@ public class MainGUI extends JFrame {
 
         add(headerPanel, BorderLayout.NORTH);
 
-        // === MENU LATERALE ===
         JPanel menuPanel = creaMenuLaterale();
         add(menuPanel, BorderLayout.WEST);
 
-        // === AREA CONTENUTO PRINCIPALE ===
         contentPanel = new JPanel(new BorderLayout());
         contentPanel.setBorder(BorderFactory.createTitledBorder("📊 Area di lavoro"));
         mostraHome();
         add(contentPanel, BorderLayout.CENTER);
     }
 
-    // METODO che crea il menu laterale
+
     private JPanel creaMenuLaterale() {
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
@@ -94,7 +83,7 @@ public class MainGUI extends JFrame {
         menuPanel.setPreferredSize(new Dimension(200, 0));
         menuPanel.setBackground(new Color(240, 240, 240));
 
-        // === BOTTONI DEL MENU ===
+
         JButton homeButton = creaBottoneMenu("🏠 Home", e -> mostraHome());
         menuPanel.add(homeButton);
 
@@ -107,13 +96,11 @@ public class MainGUI extends JFrame {
         JButton progettiButton = creaBottoneMenu("📋 Progetti", e -> mostraProgetti());
         menuPanel.add(progettiButton);
 
-        // Se è un coltivatore, mostra menu attività
         if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
             JButton attivitaButton = creaBottoneMenu("⚡ Le mie Attività", e -> mostraAttivita());
             menuPanel.add(attivitaButton);
         }
 
-        // Bottone Report (per tutti)
         JButton reportButton = creaBottoneMenu("📊 Report", e -> mostraReport());
         menuPanel.add(reportButton);
 
@@ -123,7 +110,7 @@ public class MainGUI extends JFrame {
         return menuPanel;
     }
 
-    // METODO helper per creare bottoni del menu
+
     private JButton creaBottoneMenu(String testo, ActionListener azione) {
         JButton button = new JButton(testo);
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -133,26 +120,23 @@ public class MainGUI extends JFrame {
         return button;
     }
 
-    // === METODI PER MOSTRARE LE DIVERSE SCHERMATE ===
 
-    // SCHERMATA HOME
     private void mostraHome() {
         contentPanel.removeAll();
 
         JPanel homePanel = new JPanel(new BorderLayout());
 
-        // Messaggio di benvenuto
         JLabel welcomeLabel = new JLabel("<html><h1>🌱 Benvenuto in UninaBioGarden!</h1>" +
                 "<p>Seleziona un'opzione dal menu per iniziare.</p>" +
                 "<br><h3>📊 Le tue statistiche:</h3></html>");
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         homePanel.add(welcomeLabel, BorderLayout.NORTH);
 
-        // Pannello statistiche semplici
+        // pannello statistiche semplici
         JPanel statsPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         statsPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
-        // Statistiche di base
+        // statistiche di base
         List<Lotto> lotti = lottoDAO.getLottiByProprietario(utenteCorrente.getUserId());
         JLabel lottiLabel = new JLabel("🌾 Lotti: " + lotti.size(), SwingConstants.CENTER);
         lottiLabel.setFont(new Font("Arial", Font.BOLD, 14));
@@ -186,7 +170,7 @@ public class MainGUI extends JFrame {
         contentPanel.repaint();
     }
 
-    // SCHERMATA LOTTI
+
     private void mostraLotti() {
         contentPanel.removeAll();
 
@@ -227,7 +211,7 @@ public class MainGUI extends JFrame {
         contentPanel.repaint();
     }
 
-    // SCHERMATA CULTURE
+
     private void mostraCulture() {
         contentPanel.removeAll();
 
@@ -270,7 +254,7 @@ public class MainGUI extends JFrame {
         contentPanel.repaint();
     }
 
-    // SCHERMATA PROGETTI
+
     private void mostraProgetti() {
         contentPanel.removeAll();
 
@@ -317,7 +301,7 @@ public class MainGUI extends JFrame {
         contentPanel.repaint();
     }
 
-    // SCHERMATA ATTIVITÀ
+
     private void mostraAttivita() {
         contentPanel.removeAll();
 
@@ -374,7 +358,7 @@ public class MainGUI extends JFrame {
         contentPanel.repaint();
     }
 
-    // SCHERMATA REPORT (con bottone per JFreeChart)
+
     private void mostraReport() {
         contentPanel.removeAll();
 
@@ -384,7 +368,7 @@ public class MainGUI extends JFrame {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         reportPanel.add(titleLabel, BorderLayout.NORTH);
 
-        // Report testuale semplice
+
         JTextArea reportArea = new JTextArea(20, 50);
         reportArea.setEditable(false);
         reportArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
@@ -396,7 +380,7 @@ public class MainGUI extends JFrame {
         report.append("Data report: ").append(LocalDate.now()).append("\n\n");
 
         try {
-            // Statistiche di base
+            // statistiche di base
             List<Lotto> lotti = lottoDAO.getLottiByProprietario(utenteCorrente.getUserId());
             report.append("🌾 LOTTI:\n");
             report.append("Numero totale lotti: ").append(lotti.size()).append("\n");
@@ -425,14 +409,14 @@ public class MainGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(reportArea);
         reportPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Pannello bottoni
+
         JPanel buttonPanel = new JPanel(new FlowLayout());
 
         JButton aggiornaButton = new JButton("🔄 Aggiorna Report");
         aggiornaButton.addActionListener(e -> mostraReport());
         buttonPanel.add(aggiornaButton);
 
-        // BOTTONE REPORT GRAFICI
+
         JButton reportGraficoButton = new JButton("📊 Report Grafici (JFreeChart)");
         reportGraficoButton.setBackground(new Color(34, 139, 34));
         reportGraficoButton.setForeground(Color.WHITE);
@@ -449,7 +433,7 @@ public class MainGUI extends JFrame {
         contentPanel.repaint();
     }
 
-    // METODI PER AGGIUNGERE ELEMENTI
+
 
     private void aggiungiLotto() {
         JTextField nomeField = new JTextField();

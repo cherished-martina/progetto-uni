@@ -14,7 +14,7 @@ public class AttivitaDAO {
         this.connection = dbConn.getConnection();
     }
 
-    // INSERIRE UNA NUOVA ATTIVITÀ
+
     public boolean inserisciAttivita(Attivita attivita) {
         String sql = "INSERT INTO attivita ( stato, coltivatore_id, data_pianificata, progetto_id, tipo_attivita) " +
                 "VALUES (?, ?, ?, ?, ?)";
@@ -36,7 +36,7 @@ public class AttivitaDAO {
         }
     }
 
-    //  OTTENERE TUTTE LE ATTIVITÀ DI UN COLTIVATORE
+
     public List<Attivita> getAttivitaByColtivatore(int coltivatoreId) {
         List<Attivita> attivita = new ArrayList<>();
         String sql = "SELECT * FROM attivita WHERE coltivatore_id = ? ORDER BY data_pianificata";
@@ -62,7 +62,7 @@ public class AttivitaDAO {
         return attivita;
     }
 
-    // OTTENERE ATTIVITÀ PER PROGETTO
+
     public List<Attivita> getAttivitaByProgetto(int progettoId) {
         List<Attivita> attivita = new ArrayList<>();
         String sql = "SELECT * FROM attivita WHERE progetto_id = ? ORDER BY data_pianificata";
@@ -88,7 +88,7 @@ public class AttivitaDAO {
         return attivita;
     }
 
-    // OTTENERE UN'ATTIVITÀ PER ID
+
     public Attivita getAttivitaById(int attivitaId) {
         String sql = "SELECT * FROM attivita WHERE attivita_id = ?";
 
@@ -112,7 +112,7 @@ public class AttivitaDAO {
         return null;
     }
 
-    // OTTENERE ATTIVITÀ PER STATO
+
     public List<Attivita> getAttivitaPerStato(String stato) {
         List<Attivita> attivita = new ArrayList<>();
         String sql = "SELECT * FROM attivita WHERE stato = ? ORDER BY data_pianificata";
@@ -138,7 +138,7 @@ public class AttivitaDAO {
         return attivita;
     }
 
-    // OTTENERE ATTIVITÀ PER DATA (oggi, questa settimana, ecc.)
+
     public List<Attivita> getAttivitaPerData(LocalDate dataInizio, LocalDate dataFine) {
         List<Attivita> attivita = new ArrayList<>();
         String sql = "SELECT * FROM attivita WHERE data_pianificata BETWEEN ? AND ? ORDER BY data_pianificata";
@@ -165,20 +165,20 @@ public class AttivitaDAO {
         return attivita;
     }
 
-    // OTTENERE ATTIVITÀ DI OGGI
+
     public List<Attivita> getAttivitaOggi() {
         LocalDate oggi = LocalDate.now();
         return getAttivitaPerData(oggi, oggi);
     }
 
-    // OTTENERE ATTIVITÀ DELLA SETTIMANA
+
     public List<Attivita> getAttivitaSettimana() {
         LocalDate oggi = LocalDate.now();
         LocalDate fineSettimana = oggi.plusDays(7);
         return getAttivitaPerData(oggi, fineSettimana);
     }
 
-    // AGGIORNARE UN'ATTIVITÀ
+
     public boolean aggiornaAttivita(Attivita attivita) {
         String sql = "UPDATE attivita SET tipo_attivita = ?, data_pianificata = ?, stato = ? WHERE attivita_id = ?";
 
@@ -197,7 +197,7 @@ public class AttivitaDAO {
         }
     }
 
-    // AGGIORNARE SOLO LO STATO DI UN'ATTIVITÀ
+
     public boolean aggiornaStatoAttivita(int attivitaId, String nuovoStato) {
         String sql = "UPDATE attivita SET stato = ? WHERE attivita_id = ?";
 
@@ -214,7 +214,7 @@ public class AttivitaDAO {
         }
     }
 
-    // ELIMINARE UN'ATTIVITÀ
+
     public boolean eliminaAttivita(int attivitaId) {
         String sql = "DELETE FROM attivita WHERE attivita_id = ?";
 
@@ -230,7 +230,7 @@ public class AttivitaDAO {
         }
     }
 
-    //OTTENERE ATTIVITÀ CON INFORMAZIONI COMPLETE (JOIN)
+
     public List<String> getAttivitaComplete(int coltivatoreId) {
         List<String> attivita = new ArrayList<>();
         String sql = "SELECT a.*, ps.nome_progetto, l.nome_lotto, u.nome as nome_coltivatore " +
@@ -262,7 +262,7 @@ public class AttivitaDAO {
         return attivita;
     }
 
-    // CONTARE ATTIVITÀ PER STATO
+
     public int contaAttivitaPerStato(String stato, int coltivatoreId) {
         String sql = "SELECT COUNT(*) FROM attivita WHERE stato = ? AND coltivatore_id = ?";
 
@@ -280,7 +280,7 @@ public class AttivitaDAO {
         return 0;
     }
 
-    // OTTENERE ATTIVITÀ IN RITARDO (data passata ma stato non completato)
+
     public List<Attivita> getAttivitaInRitardo(int coltivatoreId) {
         List<Attivita> attivita = new ArrayList<>();
         String sql = "SELECT * FROM attivita WHERE coltivatore_id = ? AND data_pianificata < CURRENT_DATE AND stato != 'completata' ORDER BY data_pianificata";
@@ -306,7 +306,7 @@ public class AttivitaDAO {
         return attivita;
     }
 
-    // OTTENERE STATISTICHE ATTIVITÀ PER COLTIVATORE
+
     public String getStatisticheAttivita(int coltivatoreId) {
         String sql = "SELECT " +
                 "COUNT(*) as totale, " +

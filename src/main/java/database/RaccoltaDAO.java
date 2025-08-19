@@ -16,7 +16,6 @@ public class RaccoltaDAO {
         this.connection = dbConn.getConnection();
     }
 
-    // INSERIRE UNA NUOVA RACCOLTA
     public boolean inserisciRaccolta(Raccolta raccolta) {
         String sql = "INSERT INTO raccolta (quantita, data_raccolta, attivita_id) VALUES (?, ?, ?)";
 
@@ -34,7 +33,6 @@ public class RaccoltaDAO {
         }
     }
 
-    // OTTENERE TUTTE LE RACCOLTE PER ATTIVITÀ
     public List<Raccolta> getRaccolteByAttivita(int attivitaId) {
         List<Raccolta> raccolte = new ArrayList<>();
         String sql = "SELECT * FROM raccolta WHERE attivita_id = ? ORDER BY data_raccolta DESC";
@@ -58,7 +56,7 @@ public class RaccoltaDAO {
         return raccolte;
     }
 
-    // OTTENERE UNA RACCOLTA PER ID
+
     public Raccolta getRaccoltaById(int raccoltaId) {
         String sql = "SELECT * FROM raccolta WHERE raccolta_id = ?";
 
@@ -80,7 +78,7 @@ public class RaccoltaDAO {
         return null;
     }
 
-    // OTTENERE RACCOLTE PER PERIODO
+
     public List<Raccolta> getRaccoltePerPeriodo(LocalDate dataInizio, LocalDate dataFine) {
         List<Raccolta> raccolte = new ArrayList<>();
         String sql = "SELECT * FROM raccolta WHERE data_raccolta BETWEEN ? AND ? ORDER BY data_raccolta DESC";
@@ -105,7 +103,7 @@ public class RaccoltaDAO {
         return raccolte;
     }
 
-    // AGGIORNARE UNA RACCOLTA
+
     public boolean aggiornaRaccolta(Raccolta raccolta) {
         String sql = "UPDATE raccolta SET quantita = ?, data_raccolta = ? WHERE raccolta_id = ?";
 
@@ -123,7 +121,7 @@ public class RaccoltaDAO {
         }
     }
 
-    // ELIMINARE UNA RACCOLTA
+
     public boolean eliminaRaccolta(int raccoltaId) {
         String sql = "DELETE FROM raccolta WHERE raccolta_id = ?";
 
@@ -139,7 +137,7 @@ public class RaccoltaDAO {
         }
     }
 
-    // RACCOLTE PER LOTTO
+
     public List<String> getReportRaccoltePerLotto(int proprietarioId) {
         List<String> report = new ArrayList<>();
         String sql = "SELECT l.nome_lotto, " +
@@ -170,7 +168,7 @@ public class RaccoltaDAO {
         return report;
     }
 
-    // OTTENERE RACCOLTE COMPLETE CON INFORMAZIONI BASE
+
     public List<String> getRaccolteComplete(int proprietarioId) {
         List<String> raccolte = new ArrayList<>();
         String sql = "SELECT r.*, l.nome_lotto, ps.nome_progetto, a.tipo_attivita " +
@@ -203,7 +201,7 @@ public class RaccoltaDAO {
         return raccolte;
     }
 
-    // STATISTICHE SEMPLICI
+
     public String getStatisticheRaccolte(int proprietarioId) {
         String sql = "SELECT " +
                 "COUNT(r.raccolta_id) as totale_raccolte, " +
@@ -233,20 +231,20 @@ public class RaccoltaDAO {
         return "Nessuna statistica disponibile";
     }
 
-    // OTTENERE RACCOLTE DI OGGI
+
     public List<Raccolta> getRaccolteOggi() {
         LocalDate oggi = LocalDate.now();
         return getRaccoltePerPeriodo(oggi, oggi);
     }
 
-    // OTTENERE RACCOLTE DELLA SETTIMANA
+
     public List<Raccolta> getRaccolteSettimana() {
         LocalDate oggi = LocalDate.now();
         LocalDate settimanaPrima = oggi.minusDays(7);
         return getRaccoltePerPeriodo(settimanaPrima, oggi);
     }
 
-    // CONTARE RACCOLTE PER PROPRIETARIO
+    
     public int contaRaccolte(int proprietarioId) {
         String sql = "SELECT COUNT(r.raccolta_id) " +
                 "FROM raccolta r " +

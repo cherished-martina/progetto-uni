@@ -16,7 +16,7 @@ public class LottoDAO {
         this.utenteDAO = new UtenteDAO(); // Per recuperare i proprietari
     }
 
-    // INSERIRE UN NUOVO LOTTO
+
     public boolean inserisciLotto(Lotto lotto) {
         String sql = "INSERT INTO lotto (nome_lotto, ubicazione, dimensione, proprietario_id) VALUES (?, ?, ?, ?)";
 
@@ -35,7 +35,7 @@ public class LottoDAO {
         }
     }
 
-    // OTTENERE TUTTI I LOTTI DI UN PROPRIETARIO
+
     public List<Lotto> getLottiByProprietario(int proprietarioId) {
         List<Lotto> lotti = new ArrayList<>();
         String sql = "SELECT * FROM lotto WHERE proprietario_id = ? ORDER BY nome_lotto";
@@ -44,7 +44,7 @@ public class LottoDAO {
             pstmt.setInt(1, proprietarioId);
             ResultSet rs = pstmt.executeQuery();
 
-            // Recupera i dati del proprietario una sola volta
+            // recupera i dati del proprietario
             Utente proprietario = utenteDAO.getUtenteById(proprietarioId);
 
             while (rs.next()) {
@@ -63,7 +63,7 @@ public class LottoDAO {
         return lotti;
     }
 
-    // OTTENERE TUTTI I LOTTI (per amministratori)
+    // ottenere tutti i lotti per gli amministratori
     public List<Lotto> getAllLotti() {
         List<Lotto> lotti = new ArrayList<>();
         String sql = "SELECT l.*, u.user_id, u.username, u.nome, u.cognome, u.email, u.password, u.tipo_utente " +
@@ -74,7 +74,7 @@ public class LottoDAO {
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                // Crea oggetto Utente proprietario
+
                 Utente proprietario = new Utente(
                         rs.getString("nome"),
                         rs.getString("cognome"),
@@ -85,7 +85,7 @@ public class LottoDAO {
                 );
                 proprietario.setUserId(rs.getInt("user_id"));
 
-                // Crea oggetto Lotto
+
                 Lotto lotto = new Lotto(
                         rs.getInt("lotto_id"),
                         rs.getString("nome_lotto"),
@@ -101,7 +101,7 @@ public class LottoDAO {
         return lotti;
     }
 
-    // OTTENERE UN LOTTO PER ID
+
     public Lotto getLottoById(int lottoId) {
         String sql = "SELECT l.*, u.user_id, u.username, u.nome, u.cognome, u.email, u.password, u.tipo_utente " +
                 "FROM lotto l JOIN utente u ON l.proprietario_id = u.user_id " +
@@ -112,7 +112,7 @@ public class LottoDAO {
             ResultSet rs = pstmt.executeQuery();
 
             if (rs.next()) {
-                // Crea oggetto Utente proprietario
+
                 Utente proprietario = new Utente(
                         rs.getString("nome"),
                         rs.getString("cognome"),
@@ -123,7 +123,7 @@ public class LottoDAO {
                 );
                 proprietario.setUserId(rs.getInt("user_id"));
 
-                // Crea e restituisce oggetto Lotto
+
                 return new Lotto(
                         rs.getInt("lotto_id"),
                         rs.getString("nome_lotto"),
@@ -138,7 +138,7 @@ public class LottoDAO {
         return null;
     }
 
-    // CERCARE LOTTI PER NOME O UBICAZIONE
+
     public List<Lotto> cercaLotti(String termine) {
         List<Lotto> lotti = new ArrayList<>();
         String sql = "SELECT l.*, u.user_id, u.username, u.nome, u.cognome, u.email, u.password, u.tipo_utente " +
@@ -153,7 +153,7 @@ public class LottoDAO {
             ResultSet rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                // Crea oggetto Utente proprietario
+
                 Utente proprietario = new Utente(
                         rs.getString("nome"),
                         rs.getString("cognome"),
@@ -164,7 +164,7 @@ public class LottoDAO {
                 );
                 proprietario.setUserId(rs.getInt("user_id"));
 
-                // Crea oggetto Lotto
+
                 Lotto lotto = new Lotto(
                         rs.getInt("lotto_id"),
                         rs.getString("nome_lotto"),
@@ -180,7 +180,7 @@ public class LottoDAO {
         return lotti;
     }
 
-    // AGGIORNARE UN LOTTO
+
     public boolean aggiornLotto(Lotto lotto) {
         String sql = "UPDATE lotto SET nome_lotto = ?, ubicazione = ?, dimensione = ? WHERE lotto_id = ?";
 
@@ -199,7 +199,7 @@ public class LottoDAO {
         }
     }
 
-    // ELIMINARE UN LOTTO
+
     public boolean eliminaLotto(int lottoId) {
         String sql = "DELETE FROM lotto WHERE lotto_id = ?";
 
@@ -215,7 +215,7 @@ public class LottoDAO {
         }
     }
 
-    // OTTENERE STATISTICHE LOTTI PER PROPRIETARIO
+
     public String getStatisticheLotti(int proprietarioId) {
         String sql = "SELECT COUNT(*) as numero_lotti, SUM(dimensione) as superficie_totale, AVG(dimensione) as dimensione_media " +
                 "FROM lotto WHERE proprietario_id = ?";
@@ -238,7 +238,7 @@ public class LottoDAO {
         return "Nessuna statistica disponibile";
     }
 
-    // VERIFICARE SE UN LOTTO ESISTE
+
     public boolean esisteLotto(String nomeLotto, int proprietarioId) {
         String sql = "SELECT COUNT(*) FROM lotto WHERE nome_lotto ILIKE ? AND proprietario_id = ?";
 

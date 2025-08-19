@@ -10,7 +10,6 @@ public class Utente {
     private String tipoUtente;
     private String username;
 
-    //COSTRUTTORE
     public Utente() {
     }
     public Utente(String nome, String cognome, String email, String password, String tipoUtente, String username) {
@@ -22,7 +21,7 @@ public class Utente {
         this.username = username;
     }
 
-    //GETTER E SETTER PRENDONO E MODIFICANO UN VALORE
+
     public int getUserId() {
         return userId;
     }
@@ -76,7 +75,6 @@ public class Utente {
     public String toString() {
         return nome + " " + cognome + " " + email + " " + password + " " + tipoUtente + " " + username;
     }
-// con @Override stiamo personalizzando un metodo che già esiste affinchè mostri informazioni utili
 
     //metodo equals per controllare se un utente è già registrato, automaticamente dobbiamo definire anche hashCode (code univoco per ogni oggetto)
     @Override

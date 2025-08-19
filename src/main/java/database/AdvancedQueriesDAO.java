@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
- // DAO per eseguire query avanzate e chiamare le funzioni SQL specializzate
+
 public class AdvancedQueriesDAO {
     private Connection connection;
 
@@ -16,9 +16,9 @@ public class AdvancedQueriesDAO {
         this.connection = dbConn.getConnection();
     }
 
-    // METODI PER LE VISTE
 
-    //Ottiene attività complete con informazioni di urgenza
+
+
     public List<Map<String, Object>> getAttivitaCompleteConUrgenza(int coltivatoreId) {
         List<Map<String, Object>> risultati = new ArrayList<>();
         String sql = "SELECT * FROM vista_attivita_complete WHERE coltivatore_id = ? ORDER BY urgenza, data_pianificata";
@@ -45,7 +45,6 @@ public class AdvancedQueriesDAO {
         return risultati;
     }
 
-    // Ottiene statistiche progetti per un proprietario
 
     public List<Map<String, Object>> getStatisticheProgetti(int proprietarioId) {
         List<Map<String, Object>> risultati = new ArrayList<>();
@@ -79,9 +78,7 @@ public class AdvancedQueriesDAO {
     }
 
 
-    // CHIAMATE ALLE FUNZIONI SQL
 
-    //Calcola produttività stagionale per un lotto
 
     public List<Map<String, Object>> calcolaProduttivitaStagionale(int lottoId, String stagione, int anno) {
         List<Map<String, Object>> risultati = new ArrayList<>();
@@ -108,7 +105,7 @@ public class AdvancedQueriesDAO {
         return risultati;
     }
 
-    // Suggerisce culture per una stagione
+
 
     public List<Map<String, Object>> suggerisciCulturePerStagione(String stagione) {
         List<Map<String, Object>> risultati = new ArrayList<>();
@@ -135,7 +132,7 @@ public class AdvancedQueriesDAO {
         return risultati;
     }
 
-    // Analizza performance di un coltivatore
+
     public List<Map<String, Object>> analizzaPerformanceColtivatore(int coltivatoreId) {
         List<Map<String, Object>> risultati = new ArrayList<>();
         String sql = "SELECT * FROM analizza_performance_coltivatore(?)";
@@ -162,7 +159,7 @@ public class AdvancedQueriesDAO {
         return risultati;
     }
 
-    // Prevede raccolte future per un proprietario
+
 
     public List<Map<String, Object>> prevediRaccolteFuture(int proprietarioId) {
         List<Map<String, Object>> risultati = new ArrayList<>();
@@ -189,7 +186,7 @@ public class AdvancedQueriesDAO {
         return risultati;
     }
 
-    // Ottiene statistiche complete per un utente
+
     public Map<String, Object> getStatisticheCompleteUtente(int userId) {
         Map<String, Object> statistiche = new HashMap<>();
         String sql = "SELECT * FROM get_statistiche_utente(?)";
@@ -215,9 +212,7 @@ public class AdvancedQueriesDAO {
     }
 
 
-    // METODI PER REPORT GRAFICI
 
-    //Dati per grafico raccolte per lotto (per JFreeChart)
     public Map<String, Double> getDatiGraficoRaccolteLotto(int proprietarioId) {
         Map<String, Double> dati = new HashMap<>();
         String sql = "SELECT * FROM get_report_raccolte_lotto(?)";
@@ -238,7 +233,7 @@ public class AdvancedQueriesDAO {
         return dati;
     }
 
-    //Dati per grafico distribuzione culture
+
     public Map<String, Integer> getDatiGraficoCulture() {
         Map<String, Integer> dati = new HashMap<>();
         String sql = "SELECT c.nome_cultura, COUNT(pc.progetto_id)::INTEGER as utilizzi " +
@@ -262,7 +257,7 @@ public class AdvancedQueriesDAO {
         return dati;
     }
 
-    // Dati per grafico stato attività (per coltivatori)
+
 
     public Map<String, Integer> getDatiGraficoStatoAttivita(int coltivatoreId) {
         Map<String, Integer> dati = new HashMap<>();
@@ -287,9 +282,7 @@ public class AdvancedQueriesDAO {
     }
 
 
-    // UTILITY E MANUTENZIONE
 
-    // Esegue pulizia dati obsoleti
 
     public String eseguiPuliziaDati(int giorniRetention) {
         String risultato = "Nessuna operazione eseguita";
@@ -309,7 +302,7 @@ public class AdvancedQueriesDAO {
         return risultato;
     }
 
-    // Aggiorna stati progetti (simulazione aggiornamento giornaliero)
+
 
     public boolean aggiornaStatiProgetti() {
         String sql = "INSERT INTO aggiornamenti_giornalieri (data_aggiornamento) VALUES (CURRENT_DATE) ON CONFLICT DO NOTHING";
@@ -323,7 +316,7 @@ public class AdvancedQueriesDAO {
         }
     }
 
-    // Ottiene log delle modifiche recenti
+
     public List<Map<String, Object>> getLogModificheRecenti(int limite) {
         List<Map<String, Object>> log = new ArrayList<>();
         String sql = "SELECT * FROM log_modifiche ORDER BY data_modifica DESC LIMIT ?";
@@ -350,13 +343,13 @@ public class AdvancedQueriesDAO {
         return log;
     }
 
-    //Genera report completo in formato testo per un utente
+
 
     public String generaReportCompletoUtente(int userId) {
         StringBuilder report = new StringBuilder();
 
         try {
-            // Statistiche generali
+
             Map<String, Object> stats = getStatisticheCompleteUtente(userId);
             report.append("=== REPORT COMPLETO UTENTE ===\n\n");
             report.append("📊 STATISTICHE GENERALI:\n");
@@ -368,7 +361,7 @@ public class AdvancedQueriesDAO {
             report.append("• Raccolte totali: ").append(stats.get("raccolte_totali")).append("\n");
             report.append("• Quantità raccolta totale: ").append(stats.get("quantita_raccolta_totale")).append(" kg\n\n");
 
-            // Previsioni future
+
             List<Map<String, Object>> previsioni = prevediRaccolteFuture(userId);
             if (!previsioni.isEmpty()) {
                 report.append("🔮 PREVISIONI RACCOLTE FUTURE:\n");
