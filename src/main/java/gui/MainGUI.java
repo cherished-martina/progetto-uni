@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+
 public class MainGUI extends JFrame {
     private Utente utenteCorrente;
     private LottoDAO lottoDAO;
@@ -24,6 +25,7 @@ public class MainGUI extends JFrame {
     private ProgettoStagionaleDAO progettoDAO;
     private AttivitaDAO attivitaDAO;
     private RaccoltaDAO raccoltaDAO;
+    private UtenteDAO utenteDAO;
     private JPanel contentPanel;
     private JLabel infoUtenteLabel;
 
@@ -35,30 +37,31 @@ public class MainGUI extends JFrame {
         this.progettoDAO = new ProgettoStagionaleDAO();
         this.attivitaDAO = new AttivitaDAO();
         this.raccoltaDAO = new RaccoltaDAO();
+        this.utenteDAO = new UtenteDAO();
 
         creaInterfaccia();
     }
 
     private void creaInterfaccia() {
-        setTitle("🌱 UninaBioGarden - Dashboard");
+        setTitle(" UninaBioGarden - Dashboard");
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
-        // header
+
         JPanel headerPanel = new JPanel(new BorderLayout());
         headerPanel.setBackground(new Color(34, 139, 34));
         headerPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        infoUtenteLabel = new JLabel("👤 Benvenuto, " + utenteCorrente.getNome() + " " +
+        infoUtenteLabel = new JLabel(" Benvenuto, " + utenteCorrente.getNome() + " " +
                 utenteCorrente.getCognome() + " (" + utenteCorrente.getTipoUtente() + ")");
         infoUtenteLabel.setForeground(Color.WHITE);
         infoUtenteLabel.setFont(new Font("Arial", Font.BOLD, 16));
         headerPanel.add(infoUtenteLabel, BorderLayout.WEST);
 
 
-        JButton logoutButton = new JButton("🚪 Logout");
+        JButton logoutButton = new JButton(" Logout");
         logoutButton.setBackground(Color.WHITE);
         logoutButton.setForeground(new Color(34, 139, 34));
         logoutButton.addActionListener(e -> logout());
@@ -70,7 +73,7 @@ public class MainGUI extends JFrame {
         add(menuPanel, BorderLayout.WEST);
 
         contentPanel = new JPanel(new BorderLayout());
-        contentPanel.setBorder(BorderFactory.createTitledBorder("📊 Area di lavoro"));
+        contentPanel.setBorder(BorderFactory.createTitledBorder("Area di lavoro"));
         mostraHome();
         add(contentPanel, BorderLayout.CENTER);
     }
@@ -79,32 +82,35 @@ public class MainGUI extends JFrame {
     private JPanel creaMenuLaterale() {
         JPanel menuPanel = new JPanel();
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
-        menuPanel.setBorder(BorderFactory.createTitledBorder("🗂️ Menu"));
+        menuPanel.setBorder(BorderFactory.createTitledBorder("Menu"));
         menuPanel.setPreferredSize(new Dimension(200, 0));
         menuPanel.setBackground(new Color(240, 240, 240));
 
 
-        JButton homeButton = creaBottoneMenu("🏠 Home", e -> mostraHome());
+        JButton homeButton = creaBottoneMenu(" Home", e -> mostraHome());
         menuPanel.add(homeButton);
 
-        JButton lottiButton = creaBottoneMenu("🌾 I miei Lotti", e -> mostraLotti());
+        JButton lottiButton = creaBottoneMenu("I miei Lotti", e -> mostraLotti());
         menuPanel.add(lottiButton);
 
-        JButton cultureButton = creaBottoneMenu("🌱 Culture", e -> mostraCulture());
+        JButton cultureButton = creaBottoneMenu(" Culture", e -> mostraCulture());
         menuPanel.add(cultureButton);
 
-        JButton progettiButton = creaBottoneMenu("📋 Progetti", e -> mostraProgetti());
+        JButton progettiButton = creaBottoneMenu("Progetti", e -> mostraProgetti());
         menuPanel.add(progettiButton);
 
+        JButton attivitaButton;
         if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
-            JButton attivitaButton = creaBottoneMenu("⚡ Le mie Attività", e -> mostraAttivita());
-            menuPanel.add(attivitaButton);
+            attivitaButton = creaBottoneMenu(" Le mie Attività", e -> mostraAttivita());
+        } else {
+            attivitaButton = creaBottoneMenu("Gestisci Attività", e -> mostraAttivita());
         }
+        menuPanel.add(attivitaButton);
 
-        JButton reportButton = creaBottoneMenu("📊 Report", e -> mostraReport());
+        JButton reportButton = creaBottoneMenu(" Report", e -> mostraReport());
         menuPanel.add(reportButton);
 
-        // Spazio flessibile
+
         menuPanel.add(Box.createVerticalGlue());
 
         return menuPanel;
@@ -126,40 +132,38 @@ public class MainGUI extends JFrame {
 
         JPanel homePanel = new JPanel(new BorderLayout());
 
-        JLabel welcomeLabel = new JLabel("<html><h1>🌱 Benvenuto in UninaBioGarden!</h1>" +
-                "<p>Seleziona un'opzione dal menu per iniziare.</p>" +
-                "<br><h3>📊 Le tue statistiche:</h3></html>");
+        JLabel welcomeLabel = new JLabel("Benvenuto in UninaBioGarden! Seleziona un'opzione dal menu per iniziare." );
         welcomeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         homePanel.add(welcomeLabel, BorderLayout.NORTH);
 
-        // pannello statistiche semplici
+
         JPanel statsPanel = new JPanel(new GridLayout(2, 2, 10, 10));
         statsPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
-        // statistiche di base
+
         List<Lotto> lotti = lottoDAO.getLottiByProprietario(utenteCorrente.getUserId());
-        JLabel lottiLabel = new JLabel("🌾 Lotti: " + lotti.size(), SwingConstants.CENTER);
+        JLabel lottiLabel = new JLabel(" Lotti: " + lotti.size(), SwingConstants.CENTER);
         lottiLabel.setFont(new Font("Arial", Font.BOLD, 14));
         statsPanel.add(lottiLabel);
 
         List<Cultura> culture = culturaDAO.getAllCulture();
-        JLabel cultureLabel = new JLabel("🌱 Culture disponibili: " + culture.size(), SwingConstants.CENTER);
+        JLabel cultureLabel = new JLabel(" Culture disponibili: " + culture.size(), SwingConstants.CENTER);
         cultureLabel.setFont(new Font("Arial", Font.BOLD, 14));
         statsPanel.add(cultureLabel);
 
         if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
             List<Attivita> attivita = attivitaDAO.getAttivitaByColtivatore(utenteCorrente.getUserId());
-            JLabel attivitaLabel = new JLabel("⚡ Attività totali: " + attivita.size(), SwingConstants.CENTER);
+            JLabel attivitaLabel = new JLabel("Attività totali: " + attivita.size(), SwingConstants.CENTER);
             attivitaLabel.setFont(new Font("Arial", Font.BOLD, 14));
             statsPanel.add(attivitaLabel);
         } else {
             List<ProgettoStagionale> progetti = progettoDAO.getProgettiByProprietario(utenteCorrente.getUserId());
-            JLabel progettiLabel = new JLabel("📋 Progetti: " + progetti.size(), SwingConstants.CENTER);
+            JLabel progettiLabel = new JLabel(" Progetti: " + progetti.size(), SwingConstants.CENTER);
             progettiLabel.setFont(new Font("Arial", Font.BOLD, 14));
             statsPanel.add(progettiLabel);
         }
 
-        JLabel statoLabel = new JLabel("✨ Stato: Attivo", SwingConstants.CENTER);
+        JLabel statoLabel = new JLabel(" Stato: Attivo", SwingConstants.CENTER);
         statoLabel.setFont(new Font("Arial", Font.BOLD, 14));
         statsPanel.add(statoLabel);
 
@@ -176,7 +180,7 @@ public class MainGUI extends JFrame {
 
         JPanel lottiPanel = new JPanel(new BorderLayout());
 
-        JLabel titleLabel = new JLabel("🌾 I miei Lotti", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel(" I miei Lotti", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         lottiPanel.add(titleLabel, BorderLayout.NORTH);
 
@@ -202,7 +206,7 @@ public class MainGUI extends JFrame {
             lottiPanel.add(scrollPane, BorderLayout.CENTER);
         }
 
-        JButton addLottoButton = new JButton("➕ Aggiungi Nuovo Lotto");
+        JButton addLottoButton = new JButton("Aggiungi Nuovo Lotto");
         addLottoButton.addActionListener(e -> aggiungiLotto());
         lottiPanel.add(addLottoButton, BorderLayout.SOUTH);
 
@@ -217,7 +221,7 @@ public class MainGUI extends JFrame {
 
         JPanel culturePanel = new JPanel(new BorderLayout());
 
-        JLabel titleLabel = new JLabel("🌱 Culture Disponibili", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel(" Culture Disponibili", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         culturePanel.add(titleLabel, BorderLayout.NORTH);
 
@@ -244,7 +248,7 @@ public class MainGUI extends JFrame {
         }
 
         if ("proprietario".equals(utenteCorrente.getTipoUtente())) {
-            JButton addCulturaButton = new JButton("➕ Aggiungi Nuova Cultura");
+            JButton addCulturaButton = new JButton("Aggiungi Nuova Cultura");
             addCulturaButton.addActionListener(e -> aggiungiCultura());
             culturePanel.add(addCulturaButton, BorderLayout.SOUTH);
         }
@@ -260,7 +264,7 @@ public class MainGUI extends JFrame {
 
         JPanel progettiPanel = new JPanel(new BorderLayout());
 
-        JLabel titleLabel = new JLabel("📋 I miei Progetti Stagionali", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel(" I miei Progetti Stagionali", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         progettiPanel.add(titleLabel, BorderLayout.NORTH);
 
@@ -290,7 +294,7 @@ public class MainGUI extends JFrame {
             progettiPanel.add(scrollPane, BorderLayout.CENTER);
         }
 
-        JButton addProgettoButton = new JButton("➕ Nuovo Progetto Stagionale");
+        JButton addProgettoButton = new JButton(" Nuovo Progetto Stagionale");
         addProgettoButton.setBackground(new Color(34, 139, 34));
         addProgettoButton.setForeground(Color.WHITE);
         addProgettoButton.addActionListener(e -> aggiungiProgetto());
@@ -307,15 +311,23 @@ public class MainGUI extends JFrame {
 
         JPanel attivitaPanel = new JPanel(new BorderLayout());
 
-        JLabel titleLabel = new JLabel("⚡ Le mie Attività", SwingConstants.CENTER);
+        String titolo = ("coltivatore".equals(utenteCorrente.getTipoUtente()))
+                ? "Le mie Attività"
+                : "Gestione Attività";
+        JLabel titleLabel = new JLabel(titolo, SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         attivitaPanel.add(titleLabel, BorderLayout.NORTH);
 
         try {
-            List<Attivita> attivita = attivitaDAO.getAttivitaByColtivatore(utenteCorrente.getUserId());
+            List<Attivita> attivita;
+            if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
+                attivita = attivitaDAO.getAttivitaByColtivatore(utenteCorrente.getUserId());
+            } else {
+                attivita = getAttivitaDelProrpietario(utenteCorrente.getUserId());
+            }
 
             if (attivita.isEmpty()) {
-                JLabel noAttivitaLabel = new JLabel("<html><center>Non hai ancora attività assegnate.<br>Contatta un proprietario per essere assegnato a un progetto!</center></html>", SwingConstants.CENTER);
+                JLabel noAttivitaLabel = new JLabel("Non hai ancora attività assegnate. Contatta un proprietario per essere assegnato a un progetto!", SwingConstants.CENTER);
                 attivitaPanel.add(noAttivitaLabel, BorderLayout.CENTER);
             } else {
                 String[] columnNames = {"ID", "Tipo Attività", "Data Pianificata", "Stato"};
@@ -336,12 +348,12 @@ public class MainGUI extends JFrame {
 
             JPanel buttonPanel = new JPanel(new FlowLayout());
 
-            JButton addAttivitaButton = new JButton("➕ Nuova Attività");
+            JButton addAttivitaButton = new JButton(" Nuova Attività");
             addAttivitaButton.addActionListener(e -> aggiungiAttivita());
             buttonPanel.add(addAttivitaButton);
 
             if (!attivita.isEmpty()) {
-                JButton cambiaStatoButton = new JButton("🔄 Cambia Stato");
+                JButton cambiaStatoButton = new JButton(" Cambia Stato");
                 cambiaStatoButton.addActionListener(e -> cambiaStatoAttivita());
                 buttonPanel.add(cambiaStatoButton);
             }
@@ -349,7 +361,7 @@ public class MainGUI extends JFrame {
             attivitaPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         } catch (Exception e) {
-            JLabel errorLabel = new JLabel("❌ Errore nel caricamento attività: " + e.getMessage(), SwingConstants.CENTER);
+            JLabel errorLabel = new JLabel(" Errore nel caricamento attività: " + e.getMessage(), SwingConstants.CENTER);
             attivitaPanel.add(errorLabel, BorderLayout.CENTER);
         }
 
@@ -364,7 +376,7 @@ public class MainGUI extends JFrame {
 
         JPanel reportPanel = new JPanel(new BorderLayout());
 
-        JLabel titleLabel = new JLabel("📊 Report e Statistiche", SwingConstants.CENTER);
+        JLabel titleLabel = new JLabel(" Report e Statistiche", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         reportPanel.add(titleLabel, BorderLayout.NORTH);
 
@@ -374,15 +386,15 @@ public class MainGUI extends JFrame {
         reportArea.setFont(new Font("Monospaced", Font.PLAIN, 12));
 
         StringBuilder report = new StringBuilder();
-        report.append("=== REPORT UNINABIOGARDEN ===\n\n");
+        report.append(" REPORT UNINABIOGARDEN \n\n");
         report.append("Utente: ").append(utenteCorrente.getNome()).append(" ").append(utenteCorrente.getCognome()).append("\n");
         report.append("Tipo: ").append(utenteCorrente.getTipoUtente()).append("\n");
         report.append("Data report: ").append(LocalDate.now()).append("\n\n");
 
         try {
-            // statistiche di base
+            // dati del report utente
             List<Lotto> lotti = lottoDAO.getLottiByProprietario(utenteCorrente.getUserId());
-            report.append("🌾 LOTTI:\n");
+            report.append(" LOTTI:\n");
             report.append("Numero totale lotti: ").append(lotti.size()).append("\n");
             if (!lotti.isEmpty()) {
                 double superficieTotale = lotti.stream().mapToDouble(Lotto::getDimensione).sum();
@@ -391,18 +403,18 @@ public class MainGUI extends JFrame {
             report.append("\n");
 
             List<Cultura> culture = culturaDAO.getAllCulture();
-            report.append("🌱 CULTURE:\n");
+            report.append(" CULTURE:\n");
             report.append("Culture disponibili: ").append(culture.size()).append("\n");
             report.append("\n");
 
             if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
                 String statsAttivita = attivitaDAO.getStatisticheAttivita(utenteCorrente.getUserId());
-                report.append("⚡ ATTIVITÀ:\n");
+                report.append("ATTIVITÀ:\n");
                 report.append(statsAttivita).append("\n\n");
             }
 
         } catch (Exception e) {
-            report.append("❌ Errore nel generare alcune statistiche: ").append(e.getMessage()).append("\n");
+            report.append(" Errore nel generare alcune statistiche: ").append(e.getMessage()).append("\n");
         }
 
         reportArea.setText(report.toString());
@@ -412,12 +424,12 @@ public class MainGUI extends JFrame {
 
         JPanel buttonPanel = new JPanel(new FlowLayout());
 
-        JButton aggiornaButton = new JButton("🔄 Aggiorna Report");
+        JButton aggiornaButton = new JButton(" Aggiorna Report");
         aggiornaButton.addActionListener(e -> mostraReport());
         buttonPanel.add(aggiornaButton);
 
 
-        JButton reportGraficoButton = new JButton("📊 Report Grafici (JFreeChart)");
+        JButton reportGraficoButton = new JButton(" Report Grafici (JFreeChart)");
         reportGraficoButton.setBackground(new Color(34, 139, 34));
         reportGraficoButton.setForeground(Color.WHITE);
         reportGraficoButton.addActionListener(e -> {
@@ -454,20 +466,20 @@ public class MainGUI extends JFrame {
                 double dimensione = Double.parseDouble(dimensioneField.getText());
 
                 if (nome.isEmpty() || ubicazione.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "❌ Nome e ubicazione sono obbligatori!");
+                    JOptionPane.showMessageDialog(this, " Nome e ubicazione sono obbligatori!");
                     return;
                 }
 
                 Lotto nuovoLotto = new Lotto(0, nome, ubicazione, dimensione, utenteCorrente);
 
                 if (lottoDAO.inserisciLotto(nuovoLotto)) {
-                    JOptionPane.showMessageDialog(this, "✅ Lotto aggiunto con successo!");
+                    JOptionPane.showMessageDialog(this, " Lotto aggiunto con successo!");
                     mostraLotti();
                 } else {
-                    JOptionPane.showMessageDialog(this, "❌ Errore nell'aggiunta del lotto!");
+                    JOptionPane.showMessageDialog(this, " Errore nell'aggiunta del lotto!");
                 }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "❌ Dimensione non valida!");
+                JOptionPane.showMessageDialog(this, " Dimensione non valida!");
             }
         }
     }
@@ -491,20 +503,20 @@ public class MainGUI extends JFrame {
                 int tempo = Integer.parseInt(tempoField.getText());
 
                 if (nome.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "❌ Il nome della cultura è obbligatorio!");
+                    JOptionPane.showMessageDialog(this, " Il nome della cultura è obbligatorio!");
                     return;
                 }
 
                 Cultura nuovaCultura = new Cultura(0, nome, descrizione, tempo);
 
                 if (culturaDAO.inserisciCultura(nuovaCultura)) {
-                    JOptionPane.showMessageDialog(this, "✅ Cultura aggiunta con successo!");
+                    JOptionPane.showMessageDialog(this, " Cultura aggiunta con successo!");
                     mostraCulture();
                 } else {
-                    JOptionPane.showMessageDialog(this, "❌ Errore nell'aggiunta della cultura!");
+                    JOptionPane.showMessageDialog(this, " Errore nell'aggiunta della cultura!");
                 }
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "❌ Tempo di maturazione non valido!");
+                JOptionPane.showMessageDialog(this, " Tempo di maturazione non valido!");
             }
         }
     }
@@ -512,7 +524,7 @@ public class MainGUI extends JFrame {
     private void aggiungiProgetto() {
         List<Lotto> lotti = lottoDAO.getLottiByProprietario(utenteCorrente.getUserId());
         if (lotti.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "❌ Devi prima creare almeno un lotto!");
+            JOptionPane.showMessageDialog(this, " Devi prima creare almeno un lotto!");
             return;
         }
 
@@ -552,7 +564,7 @@ public class MainGUI extends JFrame {
                 LocalDate dataFine = LocalDate.parse(dataFineField.getText().trim());
 
                 if (nomeProgetto.isEmpty()) {
-                    JOptionPane.showMessageDialog(this, "❌ Il nome del progetto è obbligatorio!");
+                    JOptionPane.showMessageDialog(this, " Il nome del progetto è obbligatorio!");
                     return;
                 }
 
@@ -562,13 +574,13 @@ public class MainGUI extends JFrame {
                 );
 
                 if (progettoDAO.inserisciProgetto(nuovoProgetto)) {
-                    JOptionPane.showMessageDialog(this, "✅ Progetto creato con successo!");
+                    JOptionPane.showMessageDialog(this, " Progetto creato con successo!");
                     mostraProgetti();
                 } else {
-                    JOptionPane.showMessageDialog(this, "❌ Errore nella creazione del progetto!");
+                    JOptionPane.showMessageDialog(this, " Errore nella creazione del progetto!");
                 }
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "❌ Errore: " + e.getMessage());
+                JOptionPane.showMessageDialog(this, " Errore: " + e.getMessage());
             }
         }
     }
@@ -593,21 +605,75 @@ public class MainGUI extends JFrame {
             return;
         }
 
+        int coltivatoreAssegnato;
+
+        if("proprietario".equals(utenteCorrente.getTipoUtente())) {
+            List<Utente> tuttiGliUtenti = utenteDAO.listaUtenti();
+            List<Utente> coltivatori = new ArrayList<>();
+
+            for (Utente utente : tuttiGliUtenti) {
+                if ("coltivatore".equals(utente.getTipoUtente())) {
+                    coltivatori.add(utente);
+                }
+            }
+
+            if(coltivatori.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Non ci sononcoltovatori disponibili! \nRegistra prima un coltvatore.");
+                return;
+            }
+
+            String[] nomiColtivatori = new String[coltivatori.size()];
+            for (int i = 0; i < coltivatori.size(); i++) {
+                Utente c = coltivatori.get(i);
+                nomiColtivatori[i] = c.getNome() + " " + c.getCognome() + " (@" + c.getUsername() + ")";
+            }
+
+            String sceltaColtivatore = (String) JOptionPane.showInputDialog(
+                    this,
+                    "Seleziona il coltivatore da assegnare:",
+                            "Assegna Attività",
+                            JOptionPane.QUESTION_MESSAGE,
+                            null,
+                            nomiColtivatori,
+                            nomiColtivatori[0]
+            );
+
+            if (sceltaColtivatore == null) {
+                return;
+            }
+
+            int indiceSelezionato = -1;
+            for (int i = 0; i < nomiColtivatori.length; i++) {
+                if (nomiColtivatori[i].equals(sceltaColtivatore)) {
+                    indiceSelezionato = i;
+                    break;
+                }
+            }
+            coltivatoreAssegnato = coltivatori.get(indiceSelezionato).getUserId();
+
+            JOptionPane.showMessageDialog(this,
+                    "Attività assegnat a: " + sceltaColtivatore);
+        } else {
+            coltivatoreAssegnato = utenteCorrente.getUserId();
+        }
+
         try {
             LocalDate data = LocalDate.parse(dataStr);
             Attivita nuovaAttivita = new Attivita(
-                    0, stato, utenteCorrente.getUserId(), data, 1, tipoAttivita.trim()
+                    0, stato, coltivatoreAssegnato, data, 1, tipoAttivita.trim()
             );
 
             if (attivitaDAO.inserisciAttivita(nuovaAttivita)) {
-                JOptionPane.showMessageDialog(this, "✅ Attività creata con successo!");
-                mostraAttivita();
+                JOptionPane.showMessageDialog(this, " Attività creata con successo!");
+                if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
+                    mostraAttivita();
+                }
             } else {
-                JOptionPane.showMessageDialog(this, "❌ Errore nella creazione dell'attività!");
+                JOptionPane.showMessageDialog(this, " Errore nella creazione dell'attività!");
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "❌ Errore: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, " Errore: " + e.getMessage());
         }
     }
 
@@ -640,10 +706,10 @@ public class MainGUI extends JFrame {
 
             if (nuovoStato != null && !nuovoStato.equals(attivita_sel.getStato())) {
                 if (attivitaDAO.aggiornaStatoAttivita(attivita_sel.getAttivitaId(), nuovoStato)) {
-                    JOptionPane.showMessageDialog(this, "✅ Stato aggiornato con successo!");
+                    JOptionPane.showMessageDialog(this, " Stato aggiornato con successo!");
                     mostraAttivita();
                 } else {
-                    JOptionPane.showMessageDialog(this, "❌ Errore nell'aggiornamento dello stato!");
+                    JOptionPane.showMessageDialog(this, " Errore nell'aggiornamento dello stato!");
                 }
             }
         }
@@ -656,5 +722,17 @@ public class MainGUI extends JFrame {
             this.dispose();
             new LoginGUI().setVisible(true);
         }
+    }
+
+    private List<Attivita> getAttivitaDelProrpietario(int proprietarioId) {
+        List<Attivita> tutteLeAttivita = new ArrayList<>();
+        List<ProgettoStagionale> proetti = progettoDAO.getProgettiByProprietario(proprietarioId);
+
+        for (ProgettoStagionale progetto : proetti) {
+            List<Attivita> attivitaProgetto = attivitaDAO.getAttivitaByProgetto(progetto.getProgettoId());
+            tutteLeAttivita.addAll(attivitaProgetto);
+        }
+
+        return tutteLeAttivita;
     }
 }

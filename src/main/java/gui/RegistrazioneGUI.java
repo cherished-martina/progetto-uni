@@ -127,13 +127,13 @@ public class RegistrazioneGUI extends JFrame {
 
         if (nome.isEmpty() || cognome.isEmpty() || email.isEmpty() ||
                 username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "❌ Tutti i campi sono obbligatori!",
+            JOptionPane.showMessageDialog(this, "Tutti i campi sono obbligatori!",
                     "Errore", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         if (utenteDAO.esisteUsername(username)) {
-            JOptionPane.showMessageDialog(this, "❌ Username già esistente! Scegline un altro.",
+            JOptionPane.showMessageDialog(this, "Username già esistente! Scegline un altro.",
                     "Errore", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -142,13 +142,13 @@ public class RegistrazioneGUI extends JFrame {
 
         if (utenteDAO.inserisciUtente(nuovoUtente)) {
             JOptionPane.showMessageDialog(this,
-                    "✅ Registrazione completata con successo!\nOra puoi fare il login.",
+                    "Registrazione completata con successo!\nOra puoi fare il login.",
                     "Successo", JOptionPane.INFORMATION_MESSAGE);
 
-            dispose(); // chiude la finestra di registrazione
+            dispose();
         } else {
             JOptionPane.showMessageDialog(this,
-                    "❌ Errore durante la registrazione. Riprova.",
+                    "Errore durante la registrazione. Riprova.",
                     "Errore", JOptionPane.ERROR_MESSAGE);
         }
     }

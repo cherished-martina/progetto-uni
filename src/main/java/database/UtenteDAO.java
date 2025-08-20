@@ -62,7 +62,7 @@ public class UtenteDAO {
         } catch (SQLException e) {
             System.err.println("Errore nell'autenticazione utente" + e.getMessage());
         }
-        return null; //autenticazione fallita
+        return null;
     }
 
 
@@ -70,7 +70,7 @@ public class UtenteDAO {
         List<Utente> utenti = new ArrayList<>();
         String sql = "SELECT user_id, nome, cognome, email, tipo_utente, username FROM utente";
 
-        System.out.println("=== DEBUG UtenteDAO.listaUtenti() ===");
+        System.out.println("DEBUG UtenteDAO.listaUtenti()");
         System.out.println("Eseguendo query: " + sql);
 
 
@@ -88,12 +88,12 @@ public class UtenteDAO {
                 System.out.println("  tipo_utente: " + rs.getString("tipo_utente"));
                 System.out.println("  username: " + rs.getString("username"));
 
-                // Creiamo utente senza password (non serve per la lista)
+
                 Utente utente = new Utente(
                         rs.getString("nome"),
                         rs.getString("cognome"),
                         rs.getString("email"),
-                        "", // password vuota - tanto non serve per listare
+                        "",
                         rs.getString("tipo_utente"),
                         rs.getString("username")
                 );

@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class LoginGUI extends JFrame {
-    // componenti dell'interfaccia
+    // sotto mettiamo le componenti dell'interfaccia
     private JTextField usernameField;
     private JPasswordField passwordField;
     private JButton loginButton;
@@ -23,22 +23,22 @@ public class LoginGUI extends JFrame {
 
 
     private void creaInterfaccia() {
-        setTitle("🌱 UninaBioGarden - Login");
+        setTitle("UninaBioGarden - Login");
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // Centro dello schermo
+        setLocationRelativeTo(null);
         setLayout(new BorderLayout());
 
         JPanel topPanel = new JPanel();
-        topPanel.setBackground(new Color(34, 139, 34)); // Verde
-        JLabel titleLabel = new JLabel("🌱 UninaBioGarden");
+        topPanel.setBackground(new Color(34, 139, 34));
+        JLabel titleLabel = new JLabel("UninaBioGarden");
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
         topPanel.add(titleLabel);
         add(topPanel, BorderLayout.NORTH);
         JPanel centerPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Spaziatura
+        gbc.insets = new Insets(10, 10, 10, 10);
 
         gbc.gridx = 0; gbc.gridy = 0;
         centerPanel.add(new JLabel("Username:"), gbc);
@@ -58,22 +58,22 @@ public class LoginGUI extends JFrame {
 
         JPanel bottomPanel = new JPanel(new FlowLayout());
 
-        loginButton = new JButton("🔑 Accedi");
+        loginButton = new JButton("Accedi");
         loginButton.setBackground(new Color(34, 139, 34));
         loginButton.setForeground(Color.WHITE);
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                eseguiLogin(); // Chiama il metodo di login
+                eseguiLogin();
             }
         });
         bottomPanel.add(loginButton);
 
-        registratiButton = new JButton("📝 Registrati");
+        registratiButton = new JButton("Registrati");
         registratiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                apriRegistrazione(); // Chiama il metodo di registrazione
+                apriRegistrazione();
             }
         });
         bottomPanel.add(registratiButton);
@@ -86,7 +86,7 @@ public class LoginGUI extends JFrame {
         String password = new String(passwordField.getPassword());
 
         if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "❌ Inserisci username e password!",
+            JOptionPane.showMessageDialog(this, "Inserisci username e password!",
                     "Errore", JOptionPane.ERROR_MESSAGE);
             return;
         }
@@ -95,13 +95,13 @@ public class LoginGUI extends JFrame {
 
         if (utente != null) {
             JOptionPane.showMessageDialog(this,
-                    "✅ Benvenuto, " + utente.getNome() + " " + utente.getCognome() + "!",
+                    "Benvenuto, " + utente.getNome() + " " + utente.getCognome() + "!",
                     "Login riuscito", JOptionPane.INFORMATION_MESSAGE);
 
             this.dispose();
             new MainGUI(utente).setVisible(true);
         } else {
-            JOptionPane.showMessageDialog(this, "❌ Username o password errati!",
+            JOptionPane.showMessageDialog(this, "Username o password errati!",
                     "Errore", JOptionPane.ERROR_MESSAGE);
         }
     }

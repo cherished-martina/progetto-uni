@@ -37,7 +37,7 @@ public class ReportGraficoGUI extends JFrame {
     }
 
     private void initializeGUI() {
-        setTitle("📊 Report Grafici JFreeChart - UninaBioGarden");
+        setTitle("Report Grafici JFreeChart - UninaBioGarden");
         setSize(900, 650);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -47,7 +47,7 @@ public class ReportGraficoGUI extends JFrame {
         topPanel.setBackground(new Color(34, 139, 34));
         topPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        JLabel titleLabel = new JLabel("📊 Report Grafici con JFreeChart:");
+        JLabel titleLabel = new JLabel("Report Grafici con JFreeChart:");
         titleLabel.setForeground(Color.WHITE);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 16));
 
@@ -59,7 +59,7 @@ public class ReportGraficoGUI extends JFrame {
         tipoReportCombo = new JComboBox<>(tipiReport);
         tipoReportCombo.setFont(new Font("Arial", Font.PLAIN, 14));
 
-        JButton generaButton = new JButton("🔄 Genera Grafico");
+        JButton generaButton = new JButton("Genera Grafico");
         generaButton.setBackground(Color.WHITE);
         generaButton.setForeground(new Color(34, 139, 34));
         generaButton.setFont(new Font("Arial", Font.BOLD, 14));
@@ -74,17 +74,14 @@ public class ReportGraficoGUI extends JFrame {
 
 
         chartPanel = new JPanel(new BorderLayout());
-        chartPanel.setBorder(BorderFactory.createTitledBorder("📊 Grafico JFreeChart"));
+        chartPanel.setBorder(BorderFactory.createTitledBorder("Grafico JFreeChart"));
 
         JLabel msgIniziale = new JLabel(
-                "<html><div style='text-align: center; font-size: 14px;'>" +
-                        "<h2>🎯 Report Grafici con JFreeChart</h2>" +
-                        "<p>Seleziona un tipo di grafico e clicca 'Genera Grafico'</p><br>" +
-                        "<p><b>Grafici disponibili:</b></p>" +
-                        "<p>• 📊 Dimensioni lotti (grafico a barre)</p>" +
-                        "<p>• 🌱 Distribuzione culture (grafico a torta)</p>" +
-                        "<p>• ⚡ Stato attività/progetti (grafico a barre)</p>" +
-                        "</div></html>",
+                " Report Grafici con JFreeChart - Seleziona un tipo di grafico e clicca 'Genera Grafico'" +
+                        "Grafici disponibili" +
+                        "Dimensioni lotti (grafico a barre)" +
+                        "Distribuzione culture (grafico a torta)" +
+                        "Stato attività/progetti (grafico a barre)",
                 SwingConstants.CENTER
         );
         msgIniziale.setFont(new Font("Arial", Font.PLAIN, 13));
@@ -96,14 +93,14 @@ public class ReportGraficoGUI extends JFrame {
         JPanel bottomPanel = new JPanel(new FlowLayout());
         bottomPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        JLabel infoLabel = new JLabel("💡 Powered by JFreeChart Library");
+        JLabel infoLabel = new JLabel("Powered by JFreeChart Library");
         infoLabel.setFont(new Font("Arial", Font.ITALIC, 12));
         infoLabel.setForeground(Color.GRAY);
         bottomPanel.add(infoLabel);
 
         bottomPanel.add(Box.createHorizontalStrut(50));
 
-        JButton chiudiButton = new JButton("❌ Chiudi");
+        JButton chiudiButton = new JButton("Chiudi");
         chiudiButton.setFont(new Font("Arial", Font.PLAIN, 14));
         chiudiButton.addActionListener(e -> dispose());
         bottomPanel.add(chiudiButton);
@@ -146,10 +143,7 @@ public class ReportGraficoGUI extends JFrame {
         } catch (Exception e) {
             JPanel errorPanel = new JPanel(new BorderLayout());
             JLabel errorLabel = new JLabel(
-                    "<html><div style='text-align: center; color: red;'>" +
-                            "<h3>❌ Errore nella generazione del grafico</h3>" +
-                            "<p>" + e.getMessage() + "</p>" +
-                            "</div></html>",
+                    "Errore nella generazione del grafico" + e.getMessage(),
                     SwingConstants.CENTER
             );
             errorPanel.add(errorLabel, BorderLayout.CENTER);
@@ -176,14 +170,14 @@ public class ReportGraficoGUI extends JFrame {
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-                "📊 Dimensioni Lotti di " + utenteCorrente.getNome(),    // Titolo
-                "Lotti",                                                // Asse X
-                "Dimensione (m²)",                                      // Asse Y
-                dataset,                                                // Dati
-                PlotOrientation.VERTICAL,                               // Orientamento
-                true,                                                   // Legenda
-                true,                                                   // Tooltips
-                false                                                   // URLs
+                "Dimensioni Lotti di " + utenteCorrente.getNome(),    // titolo del grafico
+                "Lotti",                                                // cosa c'è scritto sotto (asse X)
+                "Dimensione (m²)",                                      // cosa a sinistra (asse Y)
+                dataset,                                                // i dati
+                PlotOrientation.VERTICAL,                               // le barre
+                true,                                                   // con legenda
+                true,                                                   // info mouse (tooltips)
+                false                                                   // non cliccabile (URLs)
         );
 
 
@@ -203,17 +197,16 @@ public class ReportGraficoGUI extends JFrame {
             dataset.setValue("Nessuna cultura", 1);
         } else {
             for (Cultura cultura : culture) {
-                // Simula utilizzo: culture con maturazione più veloce sono più usate
                 double utilizzo = Math.max(5, 120 - cultura.getTempoMaturazione());
                 dataset.setValue(cultura.getNomeCultura(), utilizzo);
             }
         }
 
         JFreeChart chart = ChartFactory.createPieChart(
-                "🌱 Distribuzione Utilizzo Culture",     // Titolo
-                dataset,                                 // Dati
-                true,                                    // Legenda
-                true,                                    // Tooltips
+                "Distribuzione Utilizzo Culture",     // titolo del report
+                dataset,                                 // i dati
+                true,                                    // legenda
+                true,                                    // mouse (tooltips)
                 false                                    // URLs
         );
 
@@ -246,7 +239,7 @@ public class ReportGraficoGUI extends JFrame {
             dataset.addValue(inCorso, "Attività", "In Corso");
             dataset.addValue(completate, "Attività", "Completate");
 
-            titoloGrafico = "⚡ Stato Attività di " + utenteCorrente.getNome();
+            titoloGrafico = "Stato Attività di " + utenteCorrente.getNome();
 
         } else {
             List<ProgettoStagionale> progetti = progettoDAO.getProgettiByProprietario(utenteCorrente.getUserId());
@@ -268,11 +261,11 @@ public class ReportGraficoGUI extends JFrame {
             dataset.addValue(inCorso, "Progetti", "In Corso");
             dataset.addValue(completati, "Progetti", "Completati");
 
-            titoloGrafico = "📋 Stato Progetti di " + utenteCorrente.getNome();
+            titoloGrafico = "Stato Progetti di " + utenteCorrente.getNome();
         }
 
         JFreeChart chart = ChartFactory.createBarChart(
-                titoloGrafico,                          // titolo/assex/assex ecc come sopra
+                titoloGrafico,                          // titolo/dati/leggenda ecc come sopra
                 "Stati",
                 "Numero",
                 dataset,
@@ -291,7 +284,7 @@ public class ReportGraficoGUI extends JFrame {
 
     private String generaInfoGrafico(String tipoGrafico) {
         StringBuilder info = new StringBuilder();
-        info.append("📊 STATISTICHE DETTAGLIATE\n");
+        info.append("STATISTICHE DETTAGLIATE\n");
         info.append("=" + "=".repeat(50) + "\n");
 
         try {
@@ -300,7 +293,7 @@ public class ReportGraficoGUI extends JFrame {
                 double totale = lotti.stream().mapToDouble(Lotto::getDimensione).sum();
                 double media = lotti.isEmpty() ? 0 : totale / lotti.size();
 
-                info.append("🌾 ANALISI LOTTI:\n");
+                info.append("ANALISI LOTTI:\n");
                 info.append("• Numero lotti: ").append(lotti.size()).append("\n");
                 info.append("• Superficie totale: ").append(String.format("%.2f m²", totale)).append("\n");
                 info.append("• Superficie media per lotto: ").append(String.format("%.2f m²", media)).append("\n");
@@ -313,19 +306,19 @@ public class ReportGraficoGUI extends JFrame {
 
             } else if (tipoGrafico.contains("Culture")) {
                 List<Cultura> culture = culturaDAO.getAllCulture();
-                info.append("🌱 ANALISI CULTURE:\n");
+                info.append("ANALISI CULTURE:\n");
                 info.append("• Culture disponibili: ").append(culture.size()).append("\n");
 
                 if (!culture.isEmpty()) {
                     double tempoMedio = culture.stream().mapToInt(Cultura::getTempoMaturazione).average().orElse(0);
-                    info.append("• Tempo maturazione medio: ").append(String.format("%.1f giorni", tempoMedio)).append("\n");
+                    info.append("Tempo maturazione medio: ").append(String.format("%.1f giorni", tempoMedio)).append("\n");
 
                     Cultura veloce = culture.stream().min((c1, c2) -> Integer.compare(c1.getTempoMaturazione(), c2.getTempoMaturazione())).get();
                     Cultura lenta = culture.stream().max((c1, c2) -> Integer.compare(c1.getTempoMaturazione(), c2.getTempoMaturazione())).get();
 
-                    info.append("• Cultura più veloce: ").append(veloce.getNomeCultura())
+                    info.append("Cultura più veloce: ").append(veloce.getNomeCultura())
                             .append(" (").append(veloce.getTempoMaturazione()).append(" giorni)\n");
-                    info.append("• Cultura più lenta: ").append(lenta.getNomeCultura())
+                    info.append("Cultura più lenta: ").append(lenta.getNomeCultura())
                             .append(" (").append(lenta.getTempoMaturazione()).append(" giorni)\n");
                 }
 
@@ -334,43 +327,43 @@ public class ReportGraficoGUI extends JFrame {
                     List<Attivita> attivita = attivitaDAO.getAttivitaByColtivatore(utenteCorrente.getUserId());
                     long completate = attivita.stream().filter(a -> "completata".equals(a.getStato())).count();
 
-                    info.append("⚡ ANALISI ATTIVITÀ:\n");
-                    info.append("• Attività totali: ").append(attivita.size()).append("\n");
-                    info.append("• Attività completate: ").append(completate).append("\n");
+                    info.append("ANALISI ATTIVITÀ:\n");
+                    info.append("Attività totali: ").append(attivita.size()).append("\n");
+                    info.append("Attività completate: ").append(completate).append("\n");
 
                     if (attivita.size() > 0) {
                         double percentuale = (completate * 100.0) / attivita.size();
-                        info.append("• Percentuale completamento: ").append(String.format("%.1f%%", percentuale)).append("\n");
+                        info.append("Percentuale completamento: ").append(String.format("%.1f%%", percentuale)).append("\n");
 
                         String valutazione;
-                        if (percentuale >= 80) valutazione = "Eccellente! 🌟";
-                        else if (percentuale >= 60) valutazione = "Buono 👍";
-                        else if (percentuale >= 40) valutazione = "Sufficiente ⚡";
-                        else valutazione = "Da migliorare 💪";
+                        if (percentuale >= 80) valutazione = "Eccellente! ";
+                        else if (percentuale >= 60) valutazione = "Buono ";
+                        else if (percentuale >= 40) valutazione = "Sufficiente ";
+                        else valutazione = "Da migliorare ";
 
-                        info.append("• Valutazione: ").append(valutazione).append("\n");
+                        info.append("Valutazione: ").append(valutazione).append("\n");
                     }
                 } else {
                     List<ProgettoStagionale> progetti = progettoDAO.getProgettiByProprietario(utenteCorrente.getUserId());
                     long completati = progetti.stream().filter(p -> "completato".equals(p.getStato())).count();
 
-                    info.append("📋 ANALISI PROGETTI:\n");
-                    info.append("• Progetti totali: ").append(progetti.size()).append("\n");
-                    info.append("• Progetti completati: ").append(completati).append("\n");
+                    info.append("ANALISI PROGETTI:\n");
+                    info.append("Progetti totali: ").append(progetti.size()).append("\n");
+                    info.append("Progetti completati: ").append(completati).append("\n");
 
                     if (progetti.size() > 0) {
                         double percentuale = (completati * 100.0) / progetti.size();
-                        info.append("• Percentuale completamento: ").append(String.format("%.1f%%", percentuale)).append("\n");
+                        info.append("Percentuale completamento: ").append(String.format("%.1f%%", percentuale)).append("\n");
                     }
                 }
             }
 
         } catch (Exception e) {
-            info.append("❌ Errore nel calcolo delle statistiche: ").append(e.getMessage());
+            info.append("Errore nel calcolo delle statistiche: ").append(e.getMessage());
         }
 
-        info.append("\n📅 Report generato: ").append(java.time.LocalDateTime.now().toString().substring(0, 19));
-        info.append(" | 👤 Utente: ").append(utenteCorrente.getUsername());
+        info.append("\n Report generato: ").append(java.time.LocalDateTime.now().toString().substring(0, 19));
+        info.append(" |  Utente: ").append(utenteCorrente.getUsername());
 
         return info.toString();
     }
