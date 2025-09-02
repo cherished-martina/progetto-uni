@@ -1,4 +1,4 @@
-package database;
+package dao;
 
 import model.Attivita;
 import java.sql.*;

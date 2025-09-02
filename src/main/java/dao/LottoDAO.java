@@ -1,4 +1,4 @@
-package database;
+package dao;
 
 import model.Lotto;
 import model.Utente;
@@ -181,7 +181,7 @@ public class LottoDAO {
     }
 
 
-    public boolean aggiornLotto(Lotto lotto) {
+    public boolean aggiornaLotto(Lotto lotto) {
         String sql = "UPDATE lotto SET nome_lotto = ?, ubicazione = ?, dimensione = ? WHERE lotto_id = ?";
 
         try (PreparedStatement pstmt = connection.prepareStatement(sql)) {

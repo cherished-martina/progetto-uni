@@ -1,6 +1,6 @@
 package gui;
 
-import database.UtenteDAO;
+import controller.UtenteController;
 import model.Utente;
 import javax.swing.*;
 import java.awt.*;
@@ -13,11 +13,11 @@ public class LoginGUI extends JFrame {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton registratiButton;
-    private UtenteDAO utenteDAO;
+    private UtenteController utenteController;
 
 
     public LoginGUI() {
-        this.utenteDAO = new UtenteDAO();
+        this.utenteController = new UtenteController();
         creaInterfaccia();
     }
 
@@ -91,7 +91,7 @@ public class LoginGUI extends JFrame {
             return;
         }
 
-        Utente utente = utenteDAO.autenticaUtente(username, password);
+        Utente utente = utenteController.loginUtente(username, password);
 
         if (utente != null) {
             JOptionPane.showMessageDialog(this,
@@ -110,18 +110,4 @@ public class LoginGUI extends JFrame {
         new RegistrazioneGUI().setVisible(true);
     }
 
-    public static void main(String[] args) {
-        try {
-            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new LoginGUI().setVisible(true);
-            }
-        });
-    }
 }

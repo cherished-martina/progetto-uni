@@ -1,12 +1,10 @@
-package database;
+package dao;
 
 import model.Raccolta;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
 
 public class RaccoltaDAO {
     private Connection connection;

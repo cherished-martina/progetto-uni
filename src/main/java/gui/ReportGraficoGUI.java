@@ -1,6 +1,6 @@
 package gui;
 
-import database.*;
+import controller.*;
 import model.*;
 
 // Import JFreeChart
@@ -13,25 +13,23 @@ import org.jfree.data.general.DefaultPieDataset;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 
 public class ReportGraficoGUI extends JFrame {
     private Utente utenteCorrente;
-    private LottoDAO lottoDAO;
-    private AttivitaDAO attivitaDAO;
-    private CulturaDAO culturaDAO;
-    private ProgettoStagionaleDAO progettoDAO;
+    private LottoController lottoController;
+    private AttivitaController attivitaController;
+    private CulturaController culturaController;
+    private ProgettoStagionaleController progettoStagionaleController;
     private JPanel chartPanel;
     private JComboBox<String> tipoReportCombo;
 
     public ReportGraficoGUI(Utente utente) {
         this.utenteCorrente = utente;
-        this.lottoDAO = new LottoDAO();
-        this.attivitaDAO = new AttivitaDAO();
-        this.culturaDAO = new CulturaDAO();
-        this.progettoDAO = new ProgettoStagionaleDAO();
+        this.lottoController = new LottoController();
+        this.attivitaController = new AttivitaController();
+        this.culturaController = new CulturaController();
+        this.progettoStagionaleController = new ProgettoStagionaleController();
 
         initializeGUI();
     }
@@ -159,7 +157,7 @@ public class ReportGraficoGUI extends JFrame {
     private JFreeChart creaGraficoLotti() {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-        List<Lotto> lotti = lottoDAO.getLottiByProprietario(utenteCorrente.getUserId());
+        List<Lotto> lotti = lottoController.getLottiByProprietario(utenteCorrente.getUserId());
 
         if (lotti.isEmpty()) {
             dataset.addValue(0, "Dimensione", "Nessun lotto");
@@ -191,7 +189,7 @@ public class ReportGraficoGUI extends JFrame {
     private JFreeChart creaGraficoCulture() {
         DefaultPieDataset dataset = new DefaultPieDataset();
 
-        List<Cultura> culture = culturaDAO.getAllCulture();
+        List<Cultura> culture = culturaController.getAllCultura();
 
         if (culture.isEmpty()) {
             dataset.setValue("Nessuna cultura", 1);
@@ -220,7 +218,7 @@ public class ReportGraficoGUI extends JFrame {
         String titoloGrafico = "";
 
         if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
-            List<Attivita> attivita = attivitaDAO.getAttivitaByColtivatore(utenteCorrente.getUserId());
+            List<Attivita> attivita = attivitaController.getAttivitaByColtivatore(utenteCorrente.getUserId());
 
             int pianificate = 0, inCorso = 0, completate = 0;
 
@@ -242,7 +240,7 @@ public class ReportGraficoGUI extends JFrame {
             titoloGrafico = "Stato Attività di " + utenteCorrente.getNome();
 
         } else {
-            List<ProgettoStagionale> progetti = progettoDAO.getProgettiByProprietario(utenteCorrente.getUserId());
+            List<ProgettoStagionale> progetti = progettoStagionaleController.getProgettiByProprietario(utenteCorrente.getUserId());
 
             int pianificati = 0, inCorso = 0, completati = 0;
 
@@ -289,7 +287,7 @@ public class ReportGraficoGUI extends JFrame {
 
         try {
             if (tipoGrafico.contains("Lotti")) {
-                List<Lotto> lotti = lottoDAO.getLottiByProprietario(utenteCorrente.getUserId());
+                List<Lotto> lotti = lottoController.getLottiByProprietario(utenteCorrente.getUserId());
                 double totale = lotti.stream().mapToDouble(Lotto::getDimensione).sum();
                 double media = lotti.isEmpty() ? 0 : totale / lotti.size();
 
@@ -305,7 +303,7 @@ public class ReportGraficoGUI extends JFrame {
                 }
 
             } else if (tipoGrafico.contains("Culture")) {
-                List<Cultura> culture = culturaDAO.getAllCulture();
+                List<Cultura> culture = culturaController.getAllCultura();
                 info.append("ANALISI CULTURE:\n");
                 info.append("• Culture disponibili: ").append(culture.size()).append("\n");
 
@@ -324,7 +322,7 @@ public class ReportGraficoGUI extends JFrame {
 
             } else if (tipoGrafico.contains("Attività")) {
                 if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
-                    List<Attivita> attivita = attivitaDAO.getAttivitaByColtivatore(utenteCorrente.getUserId());
+                    List<Attivita> attivita = attivitaController.getAttivitaByColtivatore(utenteCorrente.getUserId());
                     long completate = attivita.stream().filter(a -> "completata".equals(a.getStato())).count();
 
                     info.append("ANALISI ATTIVITÀ:\n");
@@ -344,7 +342,7 @@ public class ReportGraficoGUI extends JFrame {
                         info.append("Valutazione: ").append(valutazione).append("\n");
                     }
                 } else {
-                    List<ProgettoStagionale> progetti = progettoDAO.getProgettiByProprietario(utenteCorrente.getUserId());
+                    List<ProgettoStagionale> progetti = progettoStagionaleController.getProgettiByProprietario(utenteCorrente.getUserId());
                     long completati = progetti.stream().filter(p -> "completato".equals(p.getStato())).count();
 
                     info.append("ANALISI PROGETTI:\n");

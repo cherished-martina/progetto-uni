@@ -1,43 +1,35 @@
 package gui;
 
-import database.*;
+import controller.*;
 import model.*;
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-import javax.swing.DefaultListModel;
-import javax.swing.ListSelectionModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.time.LocalDate;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 
 public class MainGUI extends JFrame {
     private Utente utenteCorrente;
-    private LottoDAO lottoDAO;
-    private CulturaDAO culturaDAO;
-    private ProgettoStagionaleDAO progettoDAO;
-    private AttivitaDAO attivitaDAO;
-    private RaccoltaDAO raccoltaDAO;
-    private UtenteDAO utenteDAO;
+    private LottoController lottoController;
+    private CulturaController culturaController;
+    private ProgettoStagionaleController progettoController;
+    private AttivitaController attivitaController;
+    private RaccoltaController raccoltaController;
+    private UtenteController utenteController;
     private JPanel contentPanel;
     private JLabel infoUtenteLabel;
 
 
     public MainGUI(Utente utente) {
         this.utenteCorrente = utente;
-        this.lottoDAO = new LottoDAO();
-        this.culturaDAO = new CulturaDAO();
-        this.progettoDAO = new ProgettoStagionaleDAO();
-        this.attivitaDAO = new AttivitaDAO();
-        this.raccoltaDAO = new RaccoltaDAO();
-        this.utenteDAO = new UtenteDAO();
+        this.lottoController = new LottoController();
+        this.culturaController = new CulturaController();
+        this.progettoController = new ProgettoStagionaleController();
+        this.attivitaController = new AttivitaController();
+        this.raccoltaController = new RaccoltaController();
+        this.utenteController = new UtenteController();
 
         creaInterfaccia();
     }
@@ -141,23 +133,23 @@ public class MainGUI extends JFrame {
         statsPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 50));
 
 
-        List<Lotto> lotti = lottoDAO.getLottiByProprietario(utenteCorrente.getUserId());
+        List<Lotto> lotti = lottoController.getLottiByProprietario(utenteCorrente.getUserId());
         JLabel lottiLabel = new JLabel(" Lotti: " + lotti.size(), SwingConstants.CENTER);
         lottiLabel.setFont(new Font("Arial", Font.BOLD, 14));
         statsPanel.add(lottiLabel);
 
-        List<Cultura> culture = culturaDAO.getAllCulture();
+        List<Cultura> culture = culturaController.getAllCultura();
         JLabel cultureLabel = new JLabel(" Culture disponibili: " + culture.size(), SwingConstants.CENTER);
         cultureLabel.setFont(new Font("Arial", Font.BOLD, 14));
         statsPanel.add(cultureLabel);
 
         if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
-            List<Attivita> attivita = attivitaDAO.getAttivitaByColtivatore(utenteCorrente.getUserId());
+            List<Attivita> attivita = attivitaController.getAttivitaByColtivatore(utenteCorrente.getUserId());
             JLabel attivitaLabel = new JLabel("Attività totali: " + attivita.size(), SwingConstants.CENTER);
             attivitaLabel.setFont(new Font("Arial", Font.BOLD, 14));
             statsPanel.add(attivitaLabel);
         } else {
-            List<ProgettoStagionale> progetti = progettoDAO.getProgettiByProprietario(utenteCorrente.getUserId());
+            List<ProgettoStagionale> progetti = progettoController.getProgettiByProprietario(utenteCorrente.getUserId());
             JLabel progettiLabel = new JLabel(" Progetti: " + progetti.size(), SwingConstants.CENTER);
             progettiLabel.setFont(new Font("Arial", Font.BOLD, 14));
             statsPanel.add(progettiLabel);
@@ -184,7 +176,7 @@ public class MainGUI extends JFrame {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         lottiPanel.add(titleLabel, BorderLayout.NORTH);
 
-        List<Lotto> lotti = lottoDAO.getLottiByProprietario(utenteCorrente.getUserId());
+        List<Lotto> lotti = lottoController.getLottiByProprietario(utenteCorrente.getUserId());
 
         if (lotti.isEmpty()) {
             JLabel noLottiLabel = new JLabel("Non hai ancora nessun lotto. Creane uno!", SwingConstants.CENTER);
@@ -225,7 +217,7 @@ public class MainGUI extends JFrame {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         culturePanel.add(titleLabel, BorderLayout.NORTH);
 
-        List<Cultura> culture = culturaDAO.getAllCulture();
+        List<Cultura> culture = culturaController.getAllCultura();
 
         if (culture.isEmpty()) {
             JLabel noCultureLabel = new JLabel("Nessuna cultura disponibile.", SwingConstants.CENTER);
@@ -268,7 +260,7 @@ public class MainGUI extends JFrame {
         titleLabel.setFont(new Font("Arial", Font.BOLD, 18));
         progettiPanel.add(titleLabel, BorderLayout.NORTH);
 
-        List<ProgettoStagionale> progetti = progettoDAO.getProgettiByProprietario(utenteCorrente.getUserId());
+        List<ProgettoStagionale> progetti = progettoController.getProgettiByProprietario(utenteCorrente.getUserId());
 
         if (progetti.isEmpty()) {
             JLabel noProgettiLabel = new JLabel("Non hai ancora progetti. Creane uno!", SwingConstants.CENTER);
@@ -321,7 +313,7 @@ public class MainGUI extends JFrame {
         try {
             List<Attivita> attivita;
             if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
-                attivita = attivitaDAO.getAttivitaByColtivatore(utenteCorrente.getUserId());
+                attivita = attivitaController.getAttivitaByColtivatore(utenteCorrente.getUserId());
             } else {
                 attivita = getAttivitaDelProrpietario(utenteCorrente.getUserId());
             }
@@ -393,7 +385,7 @@ public class MainGUI extends JFrame {
 
         try {
             // dati del report utente
-            List<Lotto> lotti = lottoDAO.getLottiByProprietario(utenteCorrente.getUserId());
+            List<Lotto> lotti = lottoController.getLottiByProprietario(utenteCorrente.getUserId());
             report.append(" LOTTI:\n");
             report.append("Numero totale lotti: ").append(lotti.size()).append("\n");
             if (!lotti.isEmpty()) {
@@ -402,13 +394,13 @@ public class MainGUI extends JFrame {
             }
             report.append("\n");
 
-            List<Cultura> culture = culturaDAO.getAllCulture();
+            List<Cultura> culture = culturaController.getAllCultura();
             report.append(" CULTURE:\n");
             report.append("Culture disponibili: ").append(culture.size()).append("\n");
             report.append("\n");
 
             if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
-                String statsAttivita = attivitaDAO.getStatisticheAttivita(utenteCorrente.getUserId());
+                String statsAttivita = attivitaController.getStatisticheAttivita(utenteCorrente.getUserId());
                 report.append("ATTIVITÀ:\n");
                 report.append(statsAttivita).append("\n\n");
             }
@@ -472,7 +464,7 @@ public class MainGUI extends JFrame {
 
                 Lotto nuovoLotto = new Lotto(0, nome, ubicazione, dimensione, utenteCorrente);
 
-                if (lottoDAO.inserisciLotto(nuovoLotto)) {
+                if (lottoController.inserisciLotto(nuovoLotto)) {
                     JOptionPane.showMessageDialog(this, " Lotto aggiunto con successo!");
                     mostraLotti();
                 } else {
@@ -509,7 +501,7 @@ public class MainGUI extends JFrame {
 
                 Cultura nuovaCultura = new Cultura(0, nome, descrizione, tempo);
 
-                if (culturaDAO.inserisciCultura(nuovaCultura)) {
+                if (culturaController.inserisciCultura(nuovaCultura)) {
                     JOptionPane.showMessageDialog(this, " Cultura aggiunta con successo!");
                     mostraCulture();
                 } else {
@@ -522,7 +514,7 @@ public class MainGUI extends JFrame {
     }
 
     private void aggiungiProgetto() {
-        List<Lotto> lotti = lottoDAO.getLottiByProprietario(utenteCorrente.getUserId());
+        List<Lotto> lotti = lottoController.getLottiByProprietario(utenteCorrente.getUserId());
         if (lotti.isEmpty()) {
             JOptionPane.showMessageDialog(this, " Devi prima creare almeno un lotto!");
             return;
@@ -573,7 +565,7 @@ public class MainGUI extends JFrame {
                         dataInizio, dataFine, utenteCorrente.getUserId(), lottoId
                 );
 
-                if (progettoDAO.inserisciProgetto(nuovoProgetto)) {
+                if (progettoController.inserisciProgetto(nuovoProgetto)) {
                     JOptionPane.showMessageDialog(this, " Progetto creato con successo!");
                     mostraProgetti();
                 } else {
@@ -608,7 +600,7 @@ public class MainGUI extends JFrame {
         int coltivatoreAssegnato;
 
         if("proprietario".equals(utenteCorrente.getTipoUtente())) {
-            List<Utente> tuttiGliUtenti = utenteDAO.listaUtenti();
+            List<Utente> tuttiGliUtenti = utenteController.listaUtenti();
             List<Utente> coltivatori = new ArrayList<>();
 
             for (Utente utente : tuttiGliUtenti) {
@@ -663,7 +655,7 @@ public class MainGUI extends JFrame {
                     0, stato, coltivatoreAssegnato, data, 1, tipoAttivita.trim()
             );
 
-            if (attivitaDAO.inserisciAttivita(nuovaAttivita)) {
+            if (attivitaController.inserisciAttivita(nuovaAttivita)) {
                 JOptionPane.showMessageDialog(this, " Attività creata con successo!");
                 if ("coltivatore".equals(utenteCorrente.getTipoUtente())) {
                     mostraAttivita();
@@ -678,7 +670,7 @@ public class MainGUI extends JFrame {
     }
 
     private void cambiaStatoAttivita() {
-        List<Attivita> attivita = attivitaDAO.getAttivitaByColtivatore(utenteCorrente.getUserId());
+        List<Attivita> attivita = attivitaController.getAttivitaByColtivatore(utenteCorrente.getUserId());
 
         if (attivita.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Non hai attività da modificare!");
@@ -705,7 +697,7 @@ public class MainGUI extends JFrame {
                     JOptionPane.QUESTION_MESSAGE, null, stati, attivita_sel.getStato());
 
             if (nuovoStato != null && !nuovoStato.equals(attivita_sel.getStato())) {
-                if (attivitaDAO.aggiornaStatoAttivita(attivita_sel.getAttivitaId(), nuovoStato)) {
+                if (attivitaController.aggiornaStatoAttivita(attivita_sel.getAttivitaId(), nuovoStato)) {
                     JOptionPane.showMessageDialog(this, " Stato aggiornato con successo!");
                     mostraAttivita();
                 } else {
@@ -726,10 +718,10 @@ public class MainGUI extends JFrame {
 
     private List<Attivita> getAttivitaDelProrpietario(int proprietarioId) {
         List<Attivita> tutteLeAttivita = new ArrayList<>();
-        List<ProgettoStagionale> proetti = progettoDAO.getProgettiByProprietario(proprietarioId);
+        List<ProgettoStagionale> proetti = progettoController.getProgettiByProprietario(proprietarioId);
 
         for (ProgettoStagionale progetto : proetti) {
-            List<Attivita> attivitaProgetto = attivitaDAO.getAttivitaByProgetto(progetto.getProgettoId());
+            List<Attivita> attivitaProgetto = attivitaController.getAttivitaByProgetto(progetto.getProgettoId());
             tutteLeAttivita.addAll(attivitaProgetto);
         }
 

@@ -1,4 +1,4 @@
-package database;
+package dao;
 
 import model.ProgettoStagionale;
 import java.sql.*;

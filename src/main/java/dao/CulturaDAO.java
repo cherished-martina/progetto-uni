@@ -1,4 +1,4 @@
-package database;
+package dao;
 
 import model.Cultura;
 import java.sql.*;

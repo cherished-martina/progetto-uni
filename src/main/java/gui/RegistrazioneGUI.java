@@ -1,6 +1,6 @@
 package gui; //GUI Graphical User Interface
 
-import database.UtenteDAO;
+import controller.UtenteController;
 import model.Utente;
 import javax.swing.*;
 import java.awt.*;
@@ -16,10 +16,10 @@ public class RegistrazioneGUI extends JFrame {
     private JComboBox<String> tipoUtenteCombo;
     private JButton registratiButton;
     private JButton annullaButton;
-    private UtenteDAO utenteDAO;
+    private UtenteController utenteController;
 
     public RegistrazioneGUI() {
-        this.utenteDAO = new UtenteDAO();
+        this.utenteController = new UtenteController();
         creaInterfaccia();
     }
 
@@ -132,7 +132,7 @@ public class RegistrazioneGUI extends JFrame {
             return;
         }
 
-        if (utenteDAO.esisteUsername(username)) {
+        if (utenteController.esisteUsername(username)) {
             JOptionPane.showMessageDialog(this, "Username già esistente! Scegline un altro.",
                     "Errore", JOptionPane.ERROR_MESSAGE);
             return;
@@ -140,7 +140,7 @@ public class RegistrazioneGUI extends JFrame {
 
         Utente nuovoUtente = new Utente(nome, cognome, email, password, tipoUtente, username);
 
-        if (utenteDAO.inserisciUtente(nuovoUtente)) {
+        if (utenteController.registraUtente(nuovoUtente)) {
             JOptionPane.showMessageDialog(this,
                     "Registrazione completata con successo!\nOra puoi fare il login.",
                     "Successo", JOptionPane.INFORMATION_MESSAGE);
