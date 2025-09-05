@@ -1,7 +1,5 @@
 package gui;
 
-import controller.UtenteController;
-import model.Utente;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -13,11 +11,12 @@ public class LoginGUI extends JFrame {
     private JPasswordField passwordField;
     private JButton loginButton;
     private JButton registratiButton;
-    private UtenteController utenteController;
 
-
-    public LoginGUI() {
-        this.utenteController = new UtenteController();
+    //Listener esterno per gestire il login
+    private LoginListener loginListener;
+    
+    public LoginGUI(LoginListener loginListener) {
+        this.loginListener = loginListener;
         creaInterfaccia();
     }
 
@@ -64,7 +63,9 @@ public class LoginGUI extends JFrame {
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                eseguiLogin();
+                if (loginListener != null) {
+                    loginListener.onLogin(usernameFiled.getText(), new Sring(passwordFiled.getPassword()));
+                }
             }
         });
         bottomPanel.add(loginButton);
@@ -73,7 +74,9 @@ public class LoginGUI extends JFrame {
         registratiButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                apriRegistrazione();
+                if (loginListener != null) {
+                    loginListener.onApriRegistrazione();
+                }
             }
         });
         bottomPanel.add(registratiButton);
@@ -81,33 +84,9 @@ public class LoginGUI extends JFrame {
         add(bottomPanel, BorderLayout.SOUTH);
     }
 
-    private void eseguiLogin() {
-        String username = usernameField.getText();
-        String password = new String(passwordField.getPassword());
-
-        if (username.isEmpty() || password.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Inserisci username e password!",
-                    "Errore", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        Utente utente = utenteController.loginUtente(username, password);
-
-        if (utente != null) {
-            JOptionPane.showMessageDialog(this,
-                    "Benvenuto, " + utente.getNome() + " " + utente.getCognome() + "!",
-                    "Login riuscito", JOptionPane.INFORMATION_MESSAGE);
-
-            this.dispose();
-            new MainGUI(utente).setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "Username o password errati!",
-                    "Errore", JOptionPane.ERROR_MESSAGE);
-        }
+    // Interfaccia per assegnare la logica esterna
+    public interface LoginListener {
+        void onLogin(String username, String password);
+        void onApriRegistrazione();
     }
-
-    private void apriRegistrazione() {
-        new RegistrazioneGUI().setVisible(true);
-    }
-
 }
